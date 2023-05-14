@@ -2,9 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import 'material-symbols';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import MainPage from './pages/MainPage';
+import InquiryModal from './pages/InquiryModal';
+import EmailModal from './pages/EmailModal';
+import InfoModal from './pages/InfoModal';
+import SupportModal from './pages/SupportModal';
+import PolicyModal from './pages/PolicyModal';
 import LoginPage from './pages/LoginPage';
 import ServiceIntroPage from './pages/ServiceIntroPage';
 import CommunityPage from './pages/CommunityPage';
@@ -18,6 +24,11 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path='/' element={ <MainPage />} />
+        <Route path='/pages/InquiryModal' element={ <InquiryModal></InquiryModal> } />
+        <Route path='/pages/EmailModal' element={ <EmailModal></EmailModal> } />
+        <Route path='/pages/InfoModal' element={ <InfoModal></InfoModal> } />
+        <Route path='/pages/SupportModal' element={ <SupportModal></SupportModal> } />
+        <Route path='/pages/PolicyModal' element={ <PolicyModal></PolicyModal> } />
         <Route path='/pages/LoginPage' element={ <LoginPage />} />
         <Route path='/pages/ServiceIntroPage' element={ <ServiceIntroPage />} />
         <Route path='/pages/CommunityPage' element={ <CommunityPage />} />
