@@ -1,9 +1,26 @@
+import ServiceIntro from "../containers/ServiceIntro";
+import Footer from "../containers/Footer";
+import Header from "../containers/Header";
+import styled from "styled-components";
+
 function ServiceIntroPage() {
-    return (
-      <>
-        서비스 소개 페이지
-      </>
-    );
-  }
+  const Style = {
+    Wrapper: styled.div`
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    `,
+  }  
   
-  export default ServiceIntroPage;
+  return (
+    <>
+      <Style.Wrapper>
+        <Header></Header>
+        <ServiceIntro></ServiceIntro>
+        <Footer></Footer>
+    </Style.Wrapper>
+    </>
+  );
+}
+
+export default ServiceIntroPage;

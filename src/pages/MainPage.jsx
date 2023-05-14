@@ -1,4 +1,5 @@
 import Footer from "../containers/Footer";
+import Header from "../containers/Header";
 import styled from "styled-components";
 import Main from "../containers/Main";
 
@@ -14,6 +15,7 @@ function MainPage() {
   return (
     <>
       <Style.Wrapper>
+        <Header></Header>
         <Main></Main>
         <Footer></Footer>
     </Style.Wrapper>

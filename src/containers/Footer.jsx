@@ -36,7 +36,6 @@ function Footer() {
     FontAwesomeIcon: styled(FontAwesomeIcon)`
         margin: auto;
         text-align: center;
-        vertical-align:middle;
         color: #94E0AC;
     `,
     IconImg: styled.img`
