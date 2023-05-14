@@ -27,6 +27,11 @@ function Header() {
         padding: 0 3vw 0 3vw;
         font-size: 24px;
         font-weight: bold;
+        &:hover{  
+          background-image: linear-gradient(93.08deg, #81E768 8.35%, #94E0AC 53.55%);
+          -webkit-background-clip: text;
+          color: transparent;
+        }
     `,
     Link: styled(Link)`
         text-decoration: none;
@@ -48,6 +53,10 @@ function Header() {
         font-size: 18px;
         font-weight: bold;
         padding: 0 1vw;
+        &:hover{  
+          background: linear-gradient(93.08deg, #81E768 8.35%, #94E0AC 53.55%);
+          color: #FFFFFF;
+        }
     `,
     
   }  
