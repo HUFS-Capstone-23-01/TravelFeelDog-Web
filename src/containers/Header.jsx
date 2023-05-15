@@ -1,8 +1,5 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComments } from "@fortawesome/free-solid-svg-icons";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import logoImg from "../img/logo.png";
 
 
@@ -17,6 +14,7 @@ function Header() {
     LogoImg: styled.img`
         width: 200px;
         height: auto;
+        padding: 0 1vw;
     `,
     Nav: styled.ul`
         display: flex;

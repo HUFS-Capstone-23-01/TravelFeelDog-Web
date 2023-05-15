@@ -32,7 +32,7 @@ function Main() {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 5vh 3vw;
+      padding: 5vh 0 5vh 3vw;
     `,
     Title: styled.div`
       font-size: 38px;
@@ -52,10 +52,10 @@ function Main() {
       display: flex;
       align-items: end;
       justify-content: center;
-      padding: 5vh 3vw;
+      padding: 5vh 3vw 5vh 0;
     `,
     Img: styled.img`
-      padding: 0 1vw;
+      padding: 0 1vw 0 0;
       animation: ${fadeIn} 2s;
     `,
   }  
