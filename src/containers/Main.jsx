@@ -30,9 +30,9 @@ function Main() {
       width: 50%;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: start;
       justify-content: center;
-      padding: 5vh 0 5vh 3vw;
+      padding: 5vh 0 5vh 10vw;
     `,
     Title: styled.div`
       font-size: 38px;
