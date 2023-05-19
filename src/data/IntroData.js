@@ -1,9 +1,18 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Img1 from "../img/intro1.png";
 import Img2 from "../img/intro2.png";
 import Img3 from "../img/intro3.png";
 import Img4 from "../img/intro4.png";
 import Img5 from "../img/intro5.png";
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+  } to {
+    opacity: 1;
+    transform: translateZ(0);
+  }`;
 
 const Style = {
     Wrapper: styled.div`
@@ -18,6 +27,7 @@ const Style = {
       align-items: center;
       justify-content: center;
       padding: 10vh 0;
+      animation: ${fadeIn} 2s;
     `,
     Contents: styled.div`
       width: 50%;
