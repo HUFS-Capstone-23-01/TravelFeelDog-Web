@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { signInGoogle } from '../auth/firebaseAuth';
 import iconImg1 from "../img/login_icon1.png";
 import iconImg2 from "../img/login_icon2.png";
+import { AuthProvider } from "./AuthProvider";
 
 function Login() {
-    
   const Style = {
     Wrapper: styled.div`
       width: 100%;
@@ -66,7 +67,6 @@ function Login() {
       float: left;
     `,
   }  
-
   return (
     <>
       <Style.Wrapper>
@@ -83,13 +83,13 @@ function Login() {
             </Style.Detail>
           </Style.Contents>
 
-          <Style.LoginBtn>
-            <Style.Icon><FontAwesomeIcon icon={faGoogle} size="1x"></FontAwesomeIcon></Style.Icon>
-            Google 로그인
-          </Style.LoginBtn>
+          <AuthProvider>
+            <Style.LoginBtn onClick={signInGoogle}>
+              <Style.Icon><FontAwesomeIcon icon={faGoogle} size="1x"></FontAwesomeIcon></Style.Icon>
+              Google 로그인
+            </Style.LoginBtn>
+          </AuthProvider>
         </Style.Article>
-        
-        
       </Style.Wrapper>
     </>
   );

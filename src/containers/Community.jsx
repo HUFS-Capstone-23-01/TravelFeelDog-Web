@@ -6,6 +6,9 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+//import body from "../data/CommunityDummyData";
+//import { useState } from "react";
+//import defaultImg from "../img/Profile.png";
 
 function Community() {
     
@@ -171,6 +174,31 @@ function Community() {
       padding: 0 1vw;
     `,
   }  
+
+  /*const [list, setList] = useState([]);
+  const [data, setData] = useState({
+    "id": 0,
+    "nickname": "",
+    "level": 0,
+    "exp": 0,
+    "imageUrl": defaultImg,
+    "token": "",
+    "feedId": 0,
+    "likes": 0,
+    "scraps": 0,
+    "title": "",
+    "body": "",
+    "createdDateTime": "",
+    "feedImagesUrl": "",
+    "feedTagContents": []
+  })
+
+  function getList() {
+    var temp = [];
+    for(let i=0; i<6; i++) {
+      body[i].member.id 
+    }
+  }*/
 
   return (
     <>

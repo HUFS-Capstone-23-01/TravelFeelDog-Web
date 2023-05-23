@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import logoImg from "../img/logo.png";
-
+import { signOut } from '../auth/firebaseAuth';
 
 function Header() {
   const Style = {
@@ -59,6 +59,9 @@ function Header() {
     
   }  
   
+  
+  const user = sessionStorage.getItem('token');
+
   return (
     <>
       <Style.Header>
@@ -68,9 +71,17 @@ function Header() {
             <Style.Link to="../pages/CommunityPage"><Style.Menu>커뮤니티</Style.Menu></Style.Link>
             <Style.Link to="../pages/MyPage"><Style.Menu>마이페이지</Style.Menu></Style.Link>
         </Style.Nav>
-        <Style.BtnWrap>
+        
+        {user? (
+          <Style.BtnWrap>
+            <Style.Link to="../pages/MainPage"><Style.LoginBtn onClick={signOut}>로그아웃</Style.LoginBtn></Style.Link>
+          </Style.BtnWrap>
+        ):(
+          <Style.BtnWrap>
             <Style.Link to="../pages/LoginPage"><Style.LoginBtn>로그인</Style.LoginBtn></Style.Link>
-        </Style.BtnWrap>
+          </Style.BtnWrap>
+        )}
+        
       </Style.Header>
       
     </>
