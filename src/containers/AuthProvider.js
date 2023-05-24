@@ -15,14 +15,14 @@ export const AuthProvider = ({ children }) => {
             sessionStorage.setItem('token',token);
             axios.get(`/api/member`, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `${token}`
                 }
             })
             .then((res) => {
                 const user = res.data.body;
-                console.log("로그인 성공");
                 if(res.data.header.status === 200) {
-                    setUser(user);
+                    console.log("로그인 성공");
+                    sessionStorage.setItem('nickname',res.data.body.nickName);
                     navigate("/");
                 } else if (res.data.header.status === 500) {
                     navigate("../pages/RegisterPage");
