@@ -14,6 +14,5 @@ export const signInGoogle= () => {
 export const signOut = () => {
     console.log('signOut');
     sessionStorage.removeItem("token");
-    sessionStorage.removeItem("nickname");
     return auth.signOut();
 }

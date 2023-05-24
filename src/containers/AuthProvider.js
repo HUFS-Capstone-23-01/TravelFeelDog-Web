@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { auth } from "../auth/firebaseAuth";
-import RegisterForm from "./RegisterForm";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -12,10 +11,8 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     auth.onAuthStateChanged(async (firebaseUser) => {
         if(firebaseUser) {
-            const token = await firebaseUser.getIdToken();
-            const nickname = await firebaseUser.displayName;
+            const token = await firebaseUser.uid;
             sessionStorage.setItem('token',token);
-            sessionStorage.setItem('nickname',nickname);
             axios.get(`/api/member`, {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -23,11 +20,12 @@ export const AuthProvider = ({ children }) => {
             })
             .then((res) => {
                 const user = res.data.body;
+                console.log("로그인 성공");
                 if(res.data.header.status === 200) {
                     setUser(user);
                     navigate("/");
                 } else if (res.data.header.status === 500) {
-                    navigate("/RegisterForm");
+                    navigate("../pages/RegisterPage");
                 }
                 
             })
