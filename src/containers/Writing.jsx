@@ -207,7 +207,15 @@ const Style = {
 };
 
 function Writing() {
-  const [input, setInput] = useState();
+  const [input, setInput] = useState({
+    "memberToken" : "",
+    "title" : "",
+    "body" : "",
+    "feedImageUrls" : [],
+    "feedTags" : []
+});
+
+  const { memberToken, title, body, feedImageUrls, feedTags } = input;
 
   return (
     <>

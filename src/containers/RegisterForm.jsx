@@ -82,9 +82,11 @@ const RegisterForm =  () => {
         if(res.data.header.status === 200) {
             sessionStorage.setItem('nickname',nickname);
             console.log("회원가입 성공");
+            alart("회원가입 성공")
             navigate("/");
         } else if (res.data.header.status === 500) {
-          console.log("닉네임 양식 오류"); 
+          console.log("닉네임 양식 오류");
+          alart("2글자 이상 16글자 이하로 작성해주세요.")
         } 
     })
     .catch((err) => {
