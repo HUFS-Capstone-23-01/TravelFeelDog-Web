@@ -11,7 +11,7 @@ function CommunityWriting() {
   return (
     <>
       <Style.Wrapper>
-        커뮤니티 글 페이지 컴포넌트
+        커뮤니티 글 페이지
       </Style.Wrapper>
     </>
   );
