@@ -3,14 +3,15 @@ import Header from "../containers/Header";
 import styled from "styled-components";
 import RegisterForm from "../containers/RegisterForm";
 
-function RegisterPage() {
-  const Style = {
-    Wrapper: styled.div`
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    `,
-  }  
+const Style = {
+  Wrapper: styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  `,
+};
+
+function RegisterPage() {  
   
   return (
     <>

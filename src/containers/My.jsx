@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
-function My() {
-    
-  const Style = {
-    Wrapper: styled.div`
-      flex: 1;
-    `,
-  }  
+const Style = {
+  Wrapper: styled.div`
+    flex: 1;
+  `,
+};
+
+function My() {  
 
   return (
     <>

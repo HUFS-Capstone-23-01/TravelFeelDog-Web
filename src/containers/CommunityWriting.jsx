@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
+const Style = {
+  Wrapper: styled.div`
+    flex: 1;
+  `,
+};  
+
 function CommunityWriting() {
-    
-  const Style = {
-    Wrapper: styled.div`
-      flex: 1;
-    `,
-  }  
 
   return (
     <>

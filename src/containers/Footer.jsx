@@ -5,63 +5,63 @@ import { faComments } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import iconImg from "../img/icon.png";
 
-
-function Footer() {
-  const Style = {
-    Footer: styled.div`
-      width: 100%;
-      height: auto;
-      line-height: 3vh;
-      display:flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: #94E0AC;
+const Style = {
+  Footer: styled.div`
+    width: 100%;
+    height: auto;
+    line-height: 3vh;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #94E0AC;
+    text-align: center;
+    color: #94E0AC;
+    padding: 3vh 0 3vh 0 
+  `,
+  IconList: styled.div`
+      display: flex;
+      justify-content: space-around;
+  `,
+  IconWrap: styled.div`
+      width: 64px;
+      height: 60px;
+      display: flex;
+      background: #FFFFFF;
+      border-radius: 50%;
+      margin: 1vw;
+  `,
+  FontAwesomeIcon: styled(FontAwesomeIcon)`
+      margin: auto;
       text-align: center;
       color: #94E0AC;
-      padding: 3vh 0 3vh 0 
-    `,
-    IconList: styled.div`
-        display: flex;
-        justify-content: space-around;
-    `,
-    IconWrap: styled.div`
-        width: 64px;
-        height: 60px;
-        display: flex;
-        background: #FFFFFF;
-        border-radius: 50%;
-        margin: 1vw;
-    `,
-    FontAwesomeIcon: styled(FontAwesomeIcon)`
-        margin: auto;
-        text-align: center;
-        color: #94E0AC;
-    `,
-    IconImg: styled.img`
-        width: 50px;
-        height: 50px;
-        margin: auto;
-        border-radius: 50%;
-    `,
-    FooterList: styled.div`
-        width: 10vw;
-        display: flex;
-        justify-content: space-around;
-        color: #FFFFFF;
-    `,
-    List: styled.div`
-        padding: 0, 2vw, 0, 2vw;
-    `,
-    Link: styled(Link)`
-        text-decoration: none;
-        color: #FFFFFF;
-    `,
-    Txt: styled.div`
-        color: #FFFFFF;
-    `,
-    
-  }  
+  `,
+  IconImg: styled.img`
+      width: 50px;
+      height: 50px;
+      margin: auto;
+      border-radius: 50%;
+  `,
+  FooterList: styled.div`
+      width: 10vw;
+      display: flex;
+      justify-content: space-around;
+      color: #FFFFFF;
+  `,
+  List: styled.div`
+      padding: 0, 2vw, 0, 2vw;
+  `,
+  Link: styled(Link)`
+      text-decoration: none;
+      color: #FFFFFF;
+  `,
+  Txt: styled.div`
+      color: #FFFFFF;
+  `,
+  
+};
+
+function Footer() {  
   
   return (
     <>

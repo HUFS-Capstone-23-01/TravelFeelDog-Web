@@ -6,67 +6,69 @@ import iconImg1 from "../img/login_icon1.png";
 import iconImg2 from "../img/login_icon2.png";
 import { AuthProvider } from "./AuthProvider";
 
+const Style = {
+  Wrapper: styled.div`
+    width: 100%;
+    height: 100%;
+    flex: 1;
+  `,
+  Article: styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  `,
+  Contents: styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0 6vh 0;
+  `,
+  Title: styled.div`
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    padding: 0 0 6vh 0;
+  `,
+  Detail: styled.div`
+    display: flex;
+    align-items: center;
+    border: 1px solid #F6F6F6;
+    border-radius: 20px;
+    background: #F6F6F6;
+    padding: 1vh 3vw;
+    margin: 1vh 0;
+    font-size: 18px;
+    font-weight: bold;
+  `,
+  ImgIcon: styled.img`
+    width: 40px;
+    height: 40px;
+    padding: 0 2vw 0 0;
+  `,
+  LoginBtn: styled.button`
+    display: flex;
+    align-items: center;
+    border: 1px solid transparent;
+    border-radius: 15px;
+    background: linear-gradient(94.1deg, #81E768 0%, #94E0AC 37.85%);
+    color: #FFFFFF;
+    padding: 2vh 5vw;
+    font-size: 28px;
+    font-weight: bold;
+  `,
+  Icon: styled.div`
+    padding: 0 2vw 0 0;
+    padding-top: 5px;
+    float: left;
+  `,
+};
+
 function Login() {
-  const Style = {
-    Wrapper: styled.div`
-      width: 100%;
-      height: 100%;
-      flex: 1;
-    `,
-    Article: styled.div`
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    `,
-    Contents: styled.div`
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 0 0 6vh 0;
-    `,
-    Title: styled.div`
-      font-size: 28px;
-      font-weight: bold;
-      text-align: center;
-      padding: 0 0 6vh 0;
-    `,
-    Detail: styled.div`
-      display: flex;
-      align-items: center;
-      border: 1px solid #F6F6F6;
-      border-radius: 20px;
-      background: #F6F6F6;
-      padding: 1vh 3vw;
-      margin: 1vh 0;
-      font-size: 18px;
-      font-weight: bold;
-    `,
-    ImgIcon: styled.img`
-      width: 40px;
-      height: 40px;
-      padding: 0 2vw 0 0;
-    `,
-    LoginBtn: styled.button`
-      display: flex;
-      align-items: center;
-      border: 1px solid transparent;
-      border-radius: 15px;
-      background: linear-gradient(94.1deg, #81E768 0%, #94E0AC 37.85%);
-      color: #FFFFFF;
-      padding: 2vh 5vw;
-      font-size: 28px;
-      font-weight: bold;
-    `,
-    Icon: styled.div`
-      padding: 0 2vw 0 0;
-      padding-top: 5px;
-      float: left;
-    `,
-  }  
+    
   return (
     <>
       <Style.Wrapper>

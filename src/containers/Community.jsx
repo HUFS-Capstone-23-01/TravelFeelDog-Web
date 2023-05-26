@@ -6,199 +6,171 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-//import body from "../data/CommunityDummyData";
-//import { useState } from "react";
-//import defaultImg from "../img/Profile.png";
+
+const Style = {
+  Wrapper: styled.div`
+    flex: 1;
+  `,
+  SearchWrap: styled.div`
+    width: 100%;
+    height: 20vh;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+  `,
+  Search: styled.div`
+    width: 40%;
+    height: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border:3px solid #94E0AC;
+    border-radius: 20px;
+  `,
+  InputWrap: styled.div`
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    line-align: 100%;
+  `,
+  Input: styled.input`
+    width: 90%;
+    height: 90%;
+    text-align: start;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    outline: none;
+  `,
+  SearchBtnWrap: styled.div`
+    padding: 10px;
+  `,
+  SearchBtn: styled.button`
+    border: none;
+    background-color: transparent;
+    outline: none;
+    box-shadow: none;
+  `,
+  WriteBtnWrap: styled.div`
+    display: flex;
+    justify-content: flex-end;
+    margin-left: auto;
+    padding-right: 10vw;
+  `,
+  WriteLink: styled(Link)`
+    text-decoration: none;
+  `,
+  Link: styled(Link)`
+    width: 80%;  
+    text-decoration: none;
+    color: #000000;
+  `,
+  WriteBtn: styled.button`
+    background-color: transparent;
+    outline: none;
+    box-shadow: none;
+    border: 2px solid #94E0AC;
+    border-radius: 10px;
+    background-image: linear-gradient(93.08deg, #81E768 8.35%, #94E0AC 53.55%);
+    -webkit-background-clip: text;
+    color: transparent;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 5px 10px 5px 10px;
+    &:hover{  
+      background: linear-gradient(93.08deg, #81E768 8.35%, #94E0AC 53.55%);
+      color: #FFFFFF;
+    }
+  `,
+  List: styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-align: center;
+    padding-top: 1vw;
+  `,
+  ListElement: styled.div`
+    width: 80%;
+    display: flex;
+    align-items: start;
+    justify-align: center;
+    padding: 2vh 5vw;
+    border-top: 1px solid #D7D7D7;
+    border-bottom: 1px solid #D7D7D7;
+  `,
+  Img: styled.img`
+    width: 15vw;
+    height: 20vh;
+    border-radius: 15px;
+    flex: 4;
+  `,
+  Profile: styled.img`
+    width: 50px;
+    height: 60px;
+    border-radius: 50%;
+    flex: 1;
+    padding: 0 1vw 0 2vw;
+  `,
+  Content: styled.div`
+    flex: 10;
+  `,
+  Writer: styled.div`
+    display: flex;
+    flex-direction: column;
+  `,
+  Title: styled.div`
+    padding: 1vh 0;
+  `,
+  Txt: styled.div`
+  `,
+  Sub: styled.div`
+    font-size: 14px;
+    color: #A5A5A5;
+  `,
+  Func: styled.div`
+    display: flex;
+  `,
+  Detail: styled.div`
+    display: flex;
+    align-items: center;
+    padding: 1vh 1vw 1vh 0;
+  `,
+  Count: styled.div`
+    font-size: 14px;
+    font-weight: bold;
+    padding-left: 3px;
+  `,
+  TagList: styled.div`
+    color: #226DFD;
+    padding: 2vh 0;
+    display: flex;
+  `,
+  Tag: styled.div`
+    padding-right: 1vw;
+  `,
+  Date: styled.div`
+    font-size: 14px;
+    color: #A5A5A5;
+    flex: 2;
+  `,
+  PageList: styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3vh 0;
+  `,
+  PageNum: styled.div`
+    display: flex;
+    flex-direction: row;
+  `,
+  Num: styled.div`
+    padding: 0 1vw;
+  `,
+};
 
 function Community() {
-    
-  const Style = {
-    Wrapper: styled.div`
-      flex: 1;
-    `,
-    SearchWrap: styled.div`
-      width: 100%;
-      height: 20vh;
-      display: flex;
-      align-items: end;
-      justify-content: center;
-    `,
-    Search: styled.div`
-      width: 40%;
-      height: 30%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border:3px solid #94E0AC;
-      border-radius: 20px;
-    `,
-    InputWrap: styled.div`
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      line-align: 100%;
-    `,
-    Input: styled.input`
-      width: 90%;
-      height: 90%;
-      text-align: start;
-      font-size: 20px;
-      font-weight: bold;
-      border: none;
-      outline: none;
-    `,
-    SearchBtnWrap: styled.div`
-      padding: 10px;
-    `,
-    SearchBtn: styled.button`
-      border: none;
-      background-color: transparent;
-      outline: none;
-      box-shadow: none;
-    `,
-    WriteBtnWrap: styled.div`
-      display: flex;
-      justify-content: flex-end;
-      margin-left: auto;
-      padding-right: 10vw;
-    `,
-    WriteLink: styled(Link)`
-      text-decoration: none;
-    `,
-    Link: styled(Link)`
-      width: 80%;  
-      text-decoration: none;
-      color: #000000;
-    `,
-    WriteBtn: styled.button`
-      background-color: transparent;
-      outline: none;
-      box-shadow: none;
-      border: 2px solid #94E0AC;
-      border-radius: 10px;
-      background-image: linear-gradient(93.08deg, #81E768 8.35%, #94E0AC 53.55%);
-      -webkit-background-clip: text;
-      color: transparent;
-      font-size: 16px;
-      font-weight: bold;
-      padding: 5px 10px 5px 10px;
-      &:hover{  
-        background: linear-gradient(93.08deg, #81E768 8.35%, #94E0AC 53.55%);
-        color: #FFFFFF;
-      }
-    `,
-    List: styled.div`
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-align: center;
-      padding-top: 1vw;
-    `,
-    ListElement: styled.div`
-      width: 80%;
-      display: flex;
-      align-items: start;
-      justify-align: center;
-      padding: 2vh 5vw;
-      border-top: 1px solid #D7D7D7;
-      border-bottom: 1px solid #D7D7D7;
-    `,
-    Img: styled.img`
-      width: 15vw;
-      height: 20vh;
-      border-radius: 15px;
-      flex: 4;
-    `,
-    Profile: styled.img`
-      width: 50px;
-      height: 60px;
-      border-radius: 50%;
-      flex: 1;
-      padding: 0 1vw 0 2vw;
-    `,
-    Content: styled.div`
-      flex: 10;
-    `,
-    Writer: styled.div`
-      display: flex;
-      flex-direction: column;
-    `,
-    Title: styled.div`
-      padding: 1vh 0;
-    `,
-    Txt: styled.div`
-    `,
-    Sub: styled.div`
-      font-size: 14px;
-      color: #A5A5A5;
-    `,
-    Func: styled.div`
-      display: flex;
-    `,
-    Detail: styled.div`
-      display: flex;
-      align-items: center;
-      padding: 1vh 1vw 1vh 0;
-    `,
-    Count: styled.div`
-      font-size: 14px;
-      font-weight: bold;
-      padding-left: 3px;
-    `,
-    TagList: styled.div`
-      color: #226DFD;
-      padding: 2vh 0;
-      display: flex;
-    `,
-    Tag: styled.div`
-      padding-right: 1vw;
-    `,
-    Date: styled.div`
-      font-size: 14px;
-      color: #A5A5A5;
-      flex: 2;
-    `,
-    PageList: styled.div`
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 3vh 0;
-    `,
-    PageNum: styled.div`
-      display: flex;
-      flex-direction: row;
-    `,
-    Num: styled.div`
-      padding: 0 1vw;
-    `,
-  }  
-
-  /*const [list, setList] = useState([]);
-  const [data, setData] = useState({
-    "id": 0,
-    "nickname": "",
-    "level": 0,
-    "exp": 0,
-    "imageUrl": defaultImg,
-    "token": "",
-    "feedId": 0,
-    "likes": 0,
-    "scraps": 0,
-    "title": "",
-    "body": "",
-    "createdDateTime": "",
-    "feedImagesUrl": "",
-    "feedTagContents": []
-  })
-
-  function getList() {
-    var temp = [];
-    for(let i=0; i<6; i++) {
-      body[i].member.id 
-    }
-  }*/
 
   return (
     <>

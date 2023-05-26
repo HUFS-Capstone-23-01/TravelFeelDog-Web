@@ -3,14 +3,15 @@ import Footer from "../containers/Footer";
 import Header from "../containers/Header";
 import styled from "styled-components";
 
-function ServiceIntroPage() {
-  const Style = {
-    Wrapper: styled.div`
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    `,
-  }  
+const Style = {
+  Wrapper: styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  `,
+}; 
+
+function ServiceIntroPage() { 
   
   return (
     <>
