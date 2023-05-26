@@ -217,6 +217,14 @@ function Writing() {
 
   const { memberToken, title, body, feedImageUrls, feedTags } = input;
 
+  const onChangeInput = (e) => {
+    const {name, value} = e.target;
+    setInput({
+        ...input,
+        [name]:value
+    });
+  };
+
   return (
     <>
       <Style.Wrapper>
