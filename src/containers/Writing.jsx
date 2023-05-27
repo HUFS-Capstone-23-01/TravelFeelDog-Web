@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -122,6 +122,7 @@ const Style = {
     border: 2px solid #C3C3C3;
     border-radius: 20px;
     padding: 6vh 6vw;
+    background-color: #FFFFFF;
   `,
   WriteTagWrap: styled.div`
     display: flex;
@@ -213,7 +214,9 @@ function Writing() {
     "body" : "",
     "feedImageUrls" : [],
     "feedTags" : []
-});
+  });
+  const [tagTxt, setTagTxt] = useState("")
+  const [tagBlocks, setTagBlocks] = useState([])
 
   const { memberToken, title, body, feedImageUrls, feedTags } = input;
 
@@ -224,6 +227,26 @@ function Writing() {
         [name]:value
     });
   };
+
+  const createTag = () => {
+    feedTags.push(tagTxt);
+    setInput({...input, ["feedTags"]:feedTags});
+    let newTag = (
+      <Style.Tag key={tagBlocks.length} id={tagTxt}>
+        <Style.DelBtn onClick={() => deleteTag(tagTxt)}><FontAwesomeIcon icon={faXmark} color="#FFFFFF" /></Style.DelBtn>
+        <Style.Txt># {tagTxt}</Style.Txt>
+      </Style.Tag>
+    );
+    setTagBlocks(current => [...current, newTag]);
+  };
+
+  const deleteTag = (id) => {
+    const tag = document.getElementById(id);
+    console.log(tag.innerText);
+    setTagBlocks(oldValues => {
+      return oldValues.filter(tagBlock => console.log(tagBlock.innerText))// != tag.innerText)
+    })
+  }
 
   return (
     <>
@@ -237,12 +260,23 @@ function Writing() {
           <Style.Content>
             <Style.WriteTitleWrap>
               <Style.WriteName>글 제목</Style.WriteName>
-              <Style.TitleInput></Style.TitleInput>
+              <Style.TitleInput
+                type="text"
+                name="title"
+                onChange={onChangeInput}
+                required
+              ></Style.TitleInput>
             </Style.WriteTitleWrap>
 
             <Style.WriteContentWrap>
               <Style.WriteName>글 내용</Style.WriteName>
-              <Style.ContentInputWrap><Style.ContentInput></Style.ContentInput></Style.ContentInputWrap>
+              <Style.ContentInputWrap>
+                <Style.ContentInput
+                  type="text"
+                  name="body"
+                  onChange={onChangeInput}
+                ></Style.ContentInput>
+              </Style.ContentInputWrap>
             </Style.WriteContentWrap>
 
             <Style.WriteImgWrap>
@@ -281,34 +315,22 @@ function Writing() {
             <Style.WriteTagWrap>
               <Style.WriteName>&nbsp;태그&nbsp;&nbsp;&nbsp;</Style.WriteName>
               <Style.TagInputWrap>
-                <Style.TagInput></Style.TagInput>
-                <Style.TagBtn><FontAwesomeIcon icon={faPencil} size="2x" color="#A4A4A4"/></Style.TagBtn>
+                <Style.TagInput
+                  type="text"
+                  name="feedTags"
+                  onChange={(e) => setTagTxt(e.target.value)}
+                ></Style.TagInput>
+                <Style.TagBtn
+                  onClick={createTag}
+                ><FontAwesomeIcon icon={faPencil} size="2x" color="#A4A4A4"/>
+                </Style.TagBtn>
               </Style.TagInputWrap>
             </Style.WriteTagWrap>
 
             <Style.TagWrap>
-              <Style.WriteName>&nbsp;태그&nbsp;&nbsp;&nbsp;</Style.WriteName>
+              <Style.WriteName>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</Style.WriteName>
               <Style.Tags>
-                <Style.Tag>
-                  <Style.DelBtn><FontAwesomeIcon icon={faXmark} color="#FFFFFF" /></Style.DelBtn>
-                  <Style.Txt># 아름다운 강산</Style.Txt>
-                </Style.Tag>
-                <Style.Tag>
-                  <Style.DelBtn><FontAwesomeIcon icon={faXmark} color="#FFFFFF" /></Style.DelBtn>
-                  <Style.Txt># 바다</Style.Txt>
-                </Style.Tag>
-                <Style.Tag>
-                  <Style.DelBtn><FontAwesomeIcon icon={faXmark} color="#FFFFFF" /></Style.DelBtn>
-                  <Style.Txt># 바다</Style.Txt>
-                </Style.Tag>
-                <Style.Tag>
-                  <Style.DelBtn><FontAwesomeIcon icon={faXmark} color="#FFFFFF" /></Style.DelBtn>
-                  <Style.Txt># 바다</Style.Txt>
-                </Style.Tag>
-                <Style.Tag>
-                  <Style.DelBtn><FontAwesomeIcon icon={faXmark} color="#FFFFFF" /></Style.DelBtn>
-                  <Style.Txt># 바다</Style.Txt>
-                </Style.Tag>
+                {tagBlocks}
               </Style.Tags>
             </Style.TagWrap>  
           </Style.Content>
