@@ -6,6 +6,10 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useEffect } from "react";
+import { useState } from "react";
+import { SyncProblem } from "@mui/icons-material";
 
 const Style = {
   Wrapper: styled.div`
@@ -107,10 +111,10 @@ const Style = {
   `,
   Profile: styled.img`
     width: 50px;
-    height: 60px;
+    height: 50px;
     border-radius: 50%;
     flex: 1;
-    padding: 0 1vw 0 2vw;
+    padding: 0 2vw 0 2vw;
   `,
   Content: styled.div`
     flex: 10;
@@ -145,6 +149,7 @@ const Style = {
     color: #226DFD;
     padding: 2vh 0;
     display: flex;
+    flex-wrap: wrap;
   `,
   Tag: styled.div`
     padding-right: 1vw;
@@ -168,9 +173,95 @@ const Style = {
   Num: styled.div`
     padding: 0 1vw;
   `,
+  NextBtn: styled.button`
+    border: none;
+    background-color: transparent;
+    &:hover{ 
+      color: #81E768;
+    }
+    ${({isselected}) => 
+      isselected ?`
+        color: #81E768;
+        font-weight: bold;
+      ` 
+      :`
+        color: #000000;
+      `
+    }
+  `,
 };
 
 function Community() {
+  const [tag, setTag] = useState("");
+  const [dataList, setDataList] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageNumbers, setPageNumbers] = useState([1,2,3,4,5,6,7,8,9,10]);
+  const [pageClick, setPageClick] = useState([true, false, false, false, false, false, false, false, false, false]);
+
+  const getData = () => {
+    axios.get(`/api/feed/list?page=${page}`)
+    .then((res) => {
+      if( res.status == 200) {
+        setDataList(res.data.body);
+        console.log("데이터를 정상적으로 불러왔습니다")
+      }
+      else {
+        console.log("데이터를 불러오는데 실패했습니다")
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  };
+
+  const searchTag = () => {
+    console.log([tag]);
+    /*axios.get(`/api/feed/list/searchTag?page=${page}`, {"tagContents": [tag]})
+    .then((res) => {
+      if(res.status == 200) {
+        console.log(res);
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });*/
+  };
+
+  const changePage = (count) => {
+    if (page%10 == 0) {
+      pageClick[9] = false;
+    } else {
+      pageClick[page%10-1] = false;
+    }
+    if (count%10 == 0) {
+      pageClick[9] = true;
+    } else {
+      pageClick[count%10-1] = true;
+    }
+    setPageClick(pageClick);
+    setPage(count);
+    getData();
+  };
+
+  const nextPage = (direction) => {
+    if (direction == "right") {
+      let newPage = pageNumbers.map( (item) => {return (item += 10);});
+      setPageNumbers(newPage);
+    } else {
+      if (page-10 < 0) {
+        setPageNumbers([1,2,3,4,5,6,7,8,9,10]);
+      } else {
+        let newPage = pageNumbers.map( (item) => {return (item -= 10);});
+        setPageNumbers(newPage);
+      }
+    }
+    setPage(pageNumbers[0]);
+    getData();
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <>
@@ -180,12 +271,16 @@ function Community() {
             <Style.SearchBtnWrap>
               <Style.SearchBtn
                 type="button"
+                onClick={searchTag}
               >
                 <FontAwesomeIcon icon={faMagnifyingGlass} color="#94E0AC" size="3x" />
               </Style.SearchBtn>
             </Style.SearchBtnWrap>
             <Style.InputWrap>
-              <Style.Input></Style.Input>
+              <Style.Input
+                type="text"
+                onChange={(e) => setTag(e.target.value)}
+              ></Style.Input>
             </Style.InputWrap>
           </Style.Search>
         </Style.SearchWrap>
@@ -197,226 +292,57 @@ function Community() {
         </Style.WriteBtnWrap>
 
         <Style.List>
-          <Style.Link to="../pages/CommunityWritingPage">
-            <Style.ListElement>
-              <Style.Img src="https://cdn.newstof.com/news/photo/202303/20152_20196_3216.jpg"></Style.Img>
-              
-              <Style.Profile src="https://png.pngtree.com/png-clipart/20220112/ourmid/pngtree-cartoon-hand-drawn-default-avatar-png-image_4154232.png"></Style.Profile>
-              
-              <Style.Content>
-                <Style.Writer>
-                  <Style.Txt>달콤한 초코</Style.Txt>
-                  <Style.Sub>Lv 45</Style.Sub>
-                </Style.Writer>
-                
-                <Style.Title>귀여운 초코와 오랜만에 나들이 왔어요~</Style.Title>
-                
-                <Style.Func>
-                  <Style.Detail>
-                    <FontAwesomeIcon icon={faHeart} color="#FF0000" />
-                    <Style.Count>25</Style.Count>
-                  </Style.Detail>
-                  <Style.Detail>
-                    <FontAwesomeIcon icon={faStar} color="#FFE600" />
-                    <Style.Count>10</Style.Count>
-                  </Style.Detail>
-                </Style.Func>
-                
-                <Style.TagList>
-                  {[<Style.Tag>#여행</Style.Tag>, <Style.Tag>#산책</Style.Tag>, <Style.Tag>#나들이</Style.Tag>, <Style.Tag>#공원</Style.Tag>]}
-                </Style.TagList>
-              </Style.Content>
-              <Style.Date>2023-04-28</Style.Date>
-              <hr/>
-            </Style.ListElement>
-          </Style.Link>
-
-          <Style.Link to="../pages/CommunityWritingPage">
-            <Style.ListElement>
-              <Style.Img src="https://cdn.newstof.com/news/photo/202303/20152_20196_3216.jpg"></Style.Img>
-              
-              <Style.Profile src="https://png.pngtree.com/png-clipart/20220112/ourmid/pngtree-cartoon-hand-drawn-default-avatar-png-image_4154232.png"></Style.Profile>
-              
-              <Style.Content>
-                <Style.Writer>
-                  <Style.Txt>달콤한 초코</Style.Txt>
-                  <Style.Sub>Lv 45</Style.Sub>
-                </Style.Writer>
-                
-                <Style.Title>귀여운 초코와 오랜만에 나들이 왔어요~</Style.Title>
-                
-                <Style.Func>
-                  <Style.Detail>
-                    <FontAwesomeIcon icon={faHeart} color="#FF0000" />
-                    <Style.Count>25</Style.Count>
-                  </Style.Detail>
-                  <Style.Detail>
-                    <FontAwesomeIcon icon={faStar} color="#FFE600" />
-                    <Style.Count>10</Style.Count>
-                  </Style.Detail>
-                </Style.Func>
-                
-                <Style.TagList>
-                  {[<Style.Tag>#여행</Style.Tag>, <Style.Tag>#산책</Style.Tag>, <Style.Tag>#나들이</Style.Tag>, <Style.Tag>#공원</Style.Tag>]}
-                </Style.TagList>
-              </Style.Content>
-              <Style.Date>2023-04-28</Style.Date>
-              <hr/>
-            </Style.ListElement>
-          </Style.Link>
-
-          <Style.Link to="../pages/CommunityWritingPage">
-            <Style.ListElement>
-              <Style.Img src="https://cdn.newstof.com/news/photo/202303/20152_20196_3216.jpg"></Style.Img>
-              
-              <Style.Profile src="https://png.pngtree.com/png-clipart/20220112/ourmid/pngtree-cartoon-hand-drawn-default-avatar-png-image_4154232.png"></Style.Profile>
-              
-              <Style.Content>
-                <Style.Writer>
-                  <Style.Txt>달콤한 초코</Style.Txt>
-                  <Style.Sub>Lv 45</Style.Sub>
-                </Style.Writer>
-                
-                <Style.Title>귀여운 초코와 오랜만에 나들이 왔어요~</Style.Title>
-                
-                <Style.Func>
-                  <Style.Detail>
-                    <FontAwesomeIcon icon={faHeart} color="#FF0000" />
-                    <Style.Count>25</Style.Count>
-                  </Style.Detail>
-                  <Style.Detail>
-                    <FontAwesomeIcon icon={faStar} color="#FFE600" />
-                    <Style.Count>10</Style.Count>
-                  </Style.Detail>
-                </Style.Func>
-                
-                <Style.TagList>
-                  {[<Style.Tag>#여행</Style.Tag>, <Style.Tag>#산책</Style.Tag>, <Style.Tag>#나들이</Style.Tag>, <Style.Tag>#공원</Style.Tag>]}
-                </Style.TagList>
-              </Style.Content>
-              <Style.Date>2023-04-28</Style.Date>
-              <hr/>
-            </Style.ListElement>
-          </Style.Link>
-
-          <Style.Link to="../pages/CommunityWritingPage">
-            <Style.ListElement>
-              <Style.Img src="https://cdn.newstof.com/news/photo/202303/20152_20196_3216.jpg"></Style.Img>
-              
-              <Style.Profile src="https://png.pngtree.com/png-clipart/20220112/ourmid/pngtree-cartoon-hand-drawn-default-avatar-png-image_4154232.png"></Style.Profile>
-              
-              <Style.Content>
-                <Style.Writer>
-                  <Style.Txt>달콤한 초코</Style.Txt>
-                  <Style.Sub>Lv 45</Style.Sub>
-                </Style.Writer>
-                
-                <Style.Title>귀여운 초코와 오랜만에 나들이 왔어요~</Style.Title>
-                
-                <Style.Func>
-                  <Style.Detail>
-                    <FontAwesomeIcon icon={faHeart} color="#FF0000" />
-                    <Style.Count>25</Style.Count>
-                  </Style.Detail>
-                  <Style.Detail>
-                    <FontAwesomeIcon icon={faStar} color="#FFE600" />
-                    <Style.Count>10</Style.Count>
-                  </Style.Detail>
-                </Style.Func>
-                
-                <Style.TagList>
-                  {[<Style.Tag>#여행</Style.Tag>, <Style.Tag>#산책</Style.Tag>, <Style.Tag>#나들이</Style.Tag>, <Style.Tag>#공원</Style.Tag>]}
-                </Style.TagList>
-              </Style.Content>
-              <Style.Date>2023-04-28</Style.Date>
-              <hr/>
-            </Style.ListElement>
-          </Style.Link>
-
-          <Style.Link to="../pages/CommunityWritingPage">
-            <Style.ListElement>
-              <Style.Img src="https://cdn.newstof.com/news/photo/202303/20152_20196_3216.jpg"></Style.Img>
-              
-              <Style.Profile src="https://png.pngtree.com/png-clipart/20220112/ourmid/pngtree-cartoon-hand-drawn-default-avatar-png-image_4154232.png"></Style.Profile>
-              
-              <Style.Content>
-                <Style.Writer>
-                  <Style.Txt>달콤한 초코</Style.Txt>
-                  <Style.Sub>Lv 45</Style.Sub>
-                </Style.Writer>
-                
-                <Style.Title>귀여운 초코와 오랜만에 나들이 왔어요~</Style.Title>
-                
-                <Style.Func>
-                  <Style.Detail>
-                    <FontAwesomeIcon icon={faHeart} color="#FF0000" />
-                    <Style.Count>25</Style.Count>
-                  </Style.Detail>
-                  <Style.Detail>
-                    <FontAwesomeIcon icon={faStar} color="#FFE600" />
-                    <Style.Count>10</Style.Count>
-                  </Style.Detail>
-                </Style.Func>
-                
-                <Style.TagList>
-                  {[<Style.Tag>#여행</Style.Tag>, <Style.Tag>#산책</Style.Tag>, <Style.Tag>#나들이</Style.Tag>, <Style.Tag>#공원</Style.Tag>]}
-                </Style.TagList>
-              </Style.Content>
-              <Style.Date>2023-04-28</Style.Date>
-              <hr/>
-            </Style.ListElement>
-          </Style.Link>
-
-          <Style.Link to="../pages/CommunityWritingPage">
-            <Style.ListElement>
-              <Style.Img src="https://cdn.newstof.com/news/photo/202303/20152_20196_3216.jpg"></Style.Img>
-              
-              <Style.Profile src="https://png.pngtree.com/png-clipart/20220112/ourmid/pngtree-cartoon-hand-drawn-default-avatar-png-image_4154232.png"></Style.Profile>
-              
-              <Style.Content>
-                <Style.Writer>
-                  <Style.Txt>달콤한 초코</Style.Txt>
-                  <Style.Sub>Lv 45</Style.Sub>
-                </Style.Writer>
-                
-                <Style.Title>귀여운 초코와 오랜만에 나들이 왔어요~</Style.Title>
-                
-                <Style.Func>
-                  <Style.Detail>
-                    <FontAwesomeIcon icon={faHeart} color="#FF0000" />
-                    <Style.Count>25</Style.Count>
-                  </Style.Detail>
-                  <Style.Detail>
-                    <FontAwesomeIcon icon={faStar} color="#FFE600" />
-                    <Style.Count>10</Style.Count>
-                  </Style.Detail>
-                </Style.Func>
-                
-                <Style.TagList>
-                  {[<Style.Tag>#여행</Style.Tag>, <Style.Tag>#산책</Style.Tag>, <Style.Tag>#나들이</Style.Tag>, <Style.Tag>#공원</Style.Tag>]}
-                </Style.TagList>
-              </Style.Content>
-              <Style.Date>2023-04-28</Style.Date>
-              <hr/>
-            </Style.ListElement>
-          </Style.Link>
+          {dataList.map(data => {
+            return (
+              <Style.Link to="../pages/CommunityWritingPage" key={data.feedId}>
+                <Style.ListElement>
+                  <Style.Img src={data.feedImagesUrl}></Style.Img>
+                  
+                  <Style.Profile src={data.member.imageUrl}></Style.Profile>
+                  
+                  <Style.Content>
+                    <Style.Writer>
+                      <Style.Txt>{data.member.nickName}</Style.Txt>
+                      <Style.Sub>Lv. {data.member.level}</Style.Sub>
+                    </Style.Writer>
+                    
+                    <Style.Title>{data.title}</Style.Title>
+                    
+                    <Style.Func>
+                      <Style.Detail>
+                        <FontAwesomeIcon icon={faHeart} color="#FF0000" />
+                        <Style.Count>{data.likes}</Style.Count>
+                      </Style.Detail>
+                      <Style.Detail>
+                        <FontAwesomeIcon icon={faStar} color="#FFE600" />
+                        <Style.Count>{data.scraps}</Style.Count>
+                      </Style.Detail>
+                    </Style.Func>
+                    
+                    <Style.TagList>
+                      {data.feedTagContents.map(tag => {
+                        return (
+                        <Style.Tag key={tag}># {tag}</Style.Tag>
+                        )})}
+                    </Style.TagList>
+                  </Style.Content>
+                  <Style.Date>{data.createdDateTime}</Style.Date>
+                  <hr/>
+                </Style.ListElement>
+              </Style.Link>
+            )})}
         </Style.List>
 
         <Style.PageList>
-          <FontAwesomeIcon icon={faChevronLeft} color="#94E0AC" size="2x" />
+        <Style.NextBtn onClick={() => nextPage("left")}><FontAwesomeIcon icon={faChevronLeft} color="#94E0AC" size="2x" /></Style.NextBtn>
           <Style.PageNum>
-            {[<Style.Num>1</Style.Num>, 
-            <Style.Num>2</Style.Num>, 
-            <Style.Num>3</Style.Num>, 
-            <Style.Num>4</Style.Num>, 
-            <Style.Num>5</Style.Num>,
-            <Style.Num>6</Style.Num>,
-            <Style.Num>7</Style.Num>,
-            <Style.Num>8</Style.Num>,
-            <Style.Num>9</Style.Num>,
-            <Style.Num>10</Style.Num>]}
+            {pageNumbers.map(number => {
+              return (
+                <Style.NextBtn key={number} isselected={number == page? 1: 0} onClick={() => changePage(number)}><Style.Num>{number}</Style.Num></Style.NextBtn>
+              )})
+            }
           </Style.PageNum>
-          <FontAwesomeIcon icon={faChevronRight} color="#94E0AC" size="2x" />
+          <Style.NextBtn onClick={() => nextPage("right")}><FontAwesomeIcon icon={faChevronRight} color="#94E0AC" size="2x" /></Style.NextBtn>
         </Style.PageList>
 
       </Style.Wrapper>

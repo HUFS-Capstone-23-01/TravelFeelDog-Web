@@ -322,11 +322,14 @@ function Writing() {
       }
     })
     .then((res) => {
-      setInput({
-        ...input,
-        ["feedImageUrls"]: res.data.body
-      });
-      console.log("이미지 업로드 성공");
+      if (res.status == 200) {
+        setInput({
+          ...input,
+          ["feedImageUrls"]: res.data.body
+        });
+        console.log("이미지 업로드 성공");
+      }
+      console.log(input["feedImageUrls"])
     })
     .catch((err) => {
       console.log(err);
