@@ -294,7 +294,7 @@ function Community() {
         <Style.List>
           {dataList.map(data => {
             return (
-              <Style.Link to="../pages/CommunityWritingPage" key={data.feedId}>
+              <Style.Link to={"../pages/CommunityWritingPage"} state={{feedId: data.feedId}} key={data.feedId}>
                 <Style.ListElement>
                   <Style.Img src={data.feedImagesUrl}></Style.Img>
                   
