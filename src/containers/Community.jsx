@@ -9,7 +9,6 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
-import { SyncProblem } from "@mui/icons-material";
 
 const Style = {
   Wrapper: styled.div`

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useRef, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencil } from "@fortawesome/free-solid-svg-icons";
+import { faHeadSideMask, faPencil } from "@fortawesome/free-solid-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
@@ -323,10 +323,9 @@ function Writing() {
     })
     .then((res) => {
       if (res.status == 200) {
-        setImgUrl(imgUrl.push(res.data.body));
-        feedImageUrls.push(imgUrl[0][0])
-        feedImageUrls.push(imgUrl[0][1])
-        feedImageUrls.push(imgUrl[0][2])
+        for (let i=0; i<res.data.body.length; i++) {
+          feedImageUrls.push(res.data.body[i]);
+        }
         setInput({
           ...input,
           ["feedImageUrls"]: feedImageUrls
