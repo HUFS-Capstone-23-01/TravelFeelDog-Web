@@ -214,16 +214,20 @@ function Community() {
   };
 
   const searchTag = () => {
-    console.log([tag]);
-    /*axios.get(`/api/feed/list/searchTag?page=${page}`, {"tagContents": [tag]})
-    .then((res) => {
-      if(res.status == 200) {
-        console.log(res);
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });*/
+    if (tag == "") {
+      window.location.reload();
+    } else {
+      axios.get(`/api/feed/list/searchTag?page=${page}&tagContents=${[tag]}`)
+      .then((res) => {
+        if(res.status == 200) {
+          setDataList(res.data.body);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+    
   };
 
   const changePage = (count) => {
