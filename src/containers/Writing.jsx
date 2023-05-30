@@ -240,7 +240,7 @@ function Writing() {
   const [tagBlocks, setTagBlocks] = useState([]);
   const [previewImage, setPreviewImage] = useState(["","",""]);
   const [reqImage, setReqImage] = useState(["","",""]);
-
+  const [imgUrl, setImgUrl] = useState([]);
   const img1Input = useRef();
   const img2Input = useRef();
   const img3Input = useRef();
@@ -323,13 +323,17 @@ function Writing() {
     })
     .then((res) => {
       if (res.status == 200) {
+        setImgUrl(imgUrl.push(res.data.body));
+        feedImageUrls.push(imgUrl[0][0])
+        feedImageUrls.push(imgUrl[0][1])
+        feedImageUrls.push(imgUrl[0][2])
         setInput({
           ...input,
-          ["feedImageUrls"]: res.data.body
+          ["feedImageUrls"]: feedImageUrls
         });
         console.log("이미지 업로드 성공");
+        console.log(input["feedImageUrls"]);
       }
-      console.log(input["feedImageUrls"])
     })
     .catch((err) => {
       console.log(err);
@@ -341,7 +345,7 @@ function Writing() {
     if (token){
       setInput({
         ...input,
-        ["memberToken"]: sessionStorage.getItem("token")
+        ["memberToken"]: token
       });
       console.log("로그인 확인")
     } else {
@@ -355,8 +359,9 @@ function Writing() {
       postImage();
       axios.post(`/api/feed/post`, input)
       .then((res) => {
-        console.log(res);
+        console.log("res = ", res);
         alert("글이 정상적으로 등록되었습니다");
+        console.log("input = ", input);
         navigate("../pages/CommunityPage");
       })
       .catch((err) => {
