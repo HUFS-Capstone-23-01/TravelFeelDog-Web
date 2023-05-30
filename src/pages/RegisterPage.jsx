@@ -1,7 +1,7 @@
-import Writing from "../containers/Writing";
 import Footer from "../containers/Footer";
 import Header from "../containers/Header";
 import styled from "styled-components";
+import RegisterForm from "../containers/RegisterForm";
 
 const Style = {
   Wrapper: styled.div`
@@ -9,19 +9,18 @@ const Style = {
     flex-direction: column;
     height: 100vh;
   `,
-};  
+};
 
-function WritingPage() {
+function RegisterPage() {  
   
   return (
     <>
-      <Style.Wrapper>
-        <Header></Header>
-        <Writing></Writing>
-        <Footer></Footer>
-    </Style.Wrapper>
+        <Style.Wrapper>
+            <RegisterForm></RegisterForm>
+            <Footer></Footer>
+        </Style.Wrapper>
     </>
   );
 }
-
-export default WritingPage;
+  
+export default RegisterPage;

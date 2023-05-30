@@ -1,12 +1,44 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import MainPage from './pages/MainPage';
+import InquiryModal from './pages/InquiryModal';
+import EmailModal from './pages/EmailModal';
+import InfoModal from './pages/InfoModal';
+import SupportModal from './pages/SupportModal';
+import PolicyModal from './pages/PolicyModal';
+import LoginPage from './pages/LoginPage';
+import ServiceIntroPage from './pages/ServiceIntroPage';
+import CommunityPage from './pages/CommunityPage';
+import CommunityWritingPage from './pages/CommunityWritingPage';
+import WritingPage from './pages/WritingPage';
+import MyPage from './pages/MyPage';
+import RegisterPage from './pages/RegisterPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={ <MainPage />} />
+        <Route path='/pages/MainPage' element={ <MainPage />} />
+        <Route path='/pages/InquiryModal' element={ <InquiryModal></InquiryModal> } />
+        <Route path='/pages/EmailModal' element={ <EmailModal></EmailModal> } />
+        <Route path='/pages/InfoModal' element={ <InfoModal></InfoModal> } />
+        <Route path='/pages/SupportModal' element={ <SupportModal></SupportModal> } />
+        <Route path='/pages/PolicyModal' element={ <PolicyModal></PolicyModal> } />
+        <Route path='/pages/LoginPage' element={ <LoginPage />} />
+        <Route path='/pages/RegisterPage' element={ <RegisterPage />} />
+        <Route path='/pages/ServiceIntroPage' element={ <ServiceIntroPage />} />
+        <Route path='/pages/CommunityPage' element={ <CommunityPage />} />
+        <Route path='/pages/CommunityWritingPage' element={ <CommunityWritingPage />} />
+        <Route path='/pages/WritingPage' element={ <WritingPage />} />
+        <Route path='/pages/MyPage' element={ <MyPage />} />
+      </Routes>
+    </BrowserRouter>
     <App />
   </React.StrictMode>
 );

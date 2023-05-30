@@ -1,4 +1,4 @@
-import Writing from "../containers/Writing";
+import Community from "../containers/Community";
 import Footer from "../containers/Footer";
 import Header from "../containers/Header";
 import styled from "styled-components";
@@ -9,19 +9,19 @@ const Style = {
     flex-direction: column;
     height: 100vh;
   `,
-};  
+};
 
-function WritingPage() {
+function CommunityPage() {  
   
   return (
     <>
       <Style.Wrapper>
         <Header></Header>
-        <Writing></Writing>
+        <Community></Community>
         <Footer></Footer>
     </Style.Wrapper>
     </>
   );
 }
 
-export default WritingPage;
+export default CommunityPage;
