@@ -208,7 +208,7 @@ function CommunityWriting() {
         }})
       .then((res) => {
         if(res.data.body)
-          alert("스크랩이 취소되었습니다.");
+          alert("좋아요가 취소되었습니다.");
           setLikeState(false);
       })
       .catch((err) => {
@@ -237,24 +237,39 @@ function CommunityWriting() {
   };
 
   const setScrap = () => {
-    axios.post(`/api/scrap`, {
-      "feedId": location.state.feedId
-    }, {
-      headers: {
-        Authorization: sessionStorage.getItem('token')
-      }})
-    .then((res) => {
-      if(res.data.body) {
-        console.log("스크랩 성공");
-        setScrapState(res.data.body);
-      } else {
-        console.log("스크랩 취소");
-        setScrapState(res.data.body);
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    })
+    if (scrapState) {
+      axios.delete(`/api/scrap?scrapId=${data.feedScrapId}`,{
+        headers: {
+          Authorization: sessionStorage.getItem('token')
+        }})
+      .then((res) => {
+        if(res.data.body)
+          alert("스크랩이 취소되었습니다.");
+          setLikeState(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    } else {
+      axios.post(`/api/scrap`, {
+        "feedId": location.state.feedId
+      }, {
+        headers: {
+          Authorization: sessionStorage.getItem('token')
+        }})
+      .then((res) => {
+        if(res.data.body) {
+          console.log("스크랩 성공");
+          setScrapState(res.data.body);
+        } else {
+          console.log("스크랩 취소");
+          setScrapState(res.data.body);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    }
   };
 
   useEffect(() => {
