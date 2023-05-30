@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 const Style = {
   Wrapper: styled.div`
@@ -79,6 +81,15 @@ const Style = {
     font-size: 16px;
     font-weight: bold;
     padding-left: 10px;
+  `,
+  DeleteBtn: styled.button`
+    border: 2px solid #94E0AC;
+    border-radius: 10px;
+    background-color: #94E0AC;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 10px;
   `,
   BodyWrap: styled.div`
     display: flex;
@@ -166,12 +177,96 @@ const Style = {
       `
     }
   `,
+  CommentInputWrap: styled.div`
+    width: 100%;
+    height: 7vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #94E0AC;
+    border-radius: 20px;
+    margin: 10vh 0 5vh 0;
+  `,
+  CommentInput: styled.input`
+    width: 90%;
+    height: 6vh;
+    border: none;
+    font-size: 18px;
+    text-align: left;
+    color: #000000;
+    outline: none;
+    &:placeholder {
+      color: #A5A5A5;
+    }
+  `,
+  SendBtn: styled.button`
+    width: 6%;
+    height: 6vh;
+    border: none;
+    background-color: transparent;
+    &:hover, &:active {
+      .logo {
+        color: #FFDD65;
+      }
+    }
+  `,
+  CommentWrap: styled.div`
+    display: flex;
+    flex-direction: column;
+  `,    
+  Comment: styled.div`
+    display: flex;
+    flex-direction: column;
+  `,
+  Wrap: styled.div`
+    display: flex;
+    padding: 1vh 0;
+  `,
+  ContentWrap: styled.div`
+    display: flex;
+    flex-direction: column;
+    flex: 5;
+  `,
+  CommentProfileImg: styled.img`
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 0 2vw;
+  `,
+  CommentMember: styled.div`
+    display: flex;
+    padding-bottom: 0.5vh;
+    font-weight: bold;
+  `,
+  CommentLevel: styled.div`
+    padding: 0 1vw;
+  `,
+  CommentNickName: styled.div`
+  `,
+  CommentContent: styled.div`
+    padding: 0 1vw;
+  `,
+  DeleteCommentBtn: styled.button`
+    height: 25px;
+    font-size: 12px;
+    border: 2px solid #94E0AC;
+    background-color: #94E0AC;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-weight: bold;
+  `,
+  Link: styled(Link)`
+    text-decoration: none;
+    color: #FFFFFF;
+  `,
 };  
 
 function CommunityWriting() {
   const location = useLocation();
   const navigate = useNavigate();
   const [data, setData] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [inputComment, setInputComment] = useState("");
   const [likeState, setLikeState] = useState(false);
   const [scrapState, setScrapState] = useState(false);
   const [likeId, setLikeId] = useState(-1);
@@ -189,7 +284,8 @@ function CommunityWriting() {
   };
 
   const deleteData = () => {
-    axios.delete(`/api/feed/detail?feedId=${location.state.feedId}`, {
+    if (sessionStorage.getItem('token') == data.member.token) {
+      axios.delete(`/api/feed/detail?feedId=${location.state.feedId}`, {
       headers: {
         Authorization: sessionStorage.getItem('token')
       }})
@@ -203,6 +299,10 @@ function CommunityWriting() {
       .catch((err) => {
         console.log(err);
       })
+    } else {
+      alert("글 삭제 권한이 없습니다.");
+    }
+    
   };
 
   const checkLikeState = async () => {
@@ -309,10 +409,55 @@ function CommunityWriting() {
     }
   };
 
+  const getComment = async () => {
+    axios.get(`/api/comment/all?feedId=${location.state.feedId}`, {
+      headers: {
+        Authorization: sessionStorage.getItem('token')
+      }})
+    .then((res) => {setComments(res.data.body); console.log(res);})
+    .catch((err) => console.log(err));
+  };
+
+  const addComment = () => {
+    axios.post(`/api/comment`, {
+        "feedId": location.state.feedId,
+        "content": inputComment
+      }, {
+      headers: {
+        Authorization: sessionStorage.getItem('token')
+      }})
+    .then((res) => { window.location.reload(); })
+    .catch((err) => console.log(err));
+  };
+
+  const deleteComment = (id) => {
+    console.log(id);
+    console.log(comments);
+    axios.delete(`/api/comment/?commentId=${id}`, {
+      headers: {
+        Authorization: sessionStorage.getItem('token')
+      }})
+    .then((res) => {
+      if(res.status == 200) {
+        if (res.data.body) {
+          alert("정상적으로 댓글이 삭제되었습니다");
+          console.log("데이터 삭제 성공");
+          window.location.reload();
+        } else {
+          alert("삭제 권한이 없습니다.");
+        } 
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  };
+
   useEffect(() => {
     getData();
     checkLikeState();
     checkScrapState();
+    getComment();
   }, []);
 
 
@@ -342,6 +487,7 @@ function CommunityWriting() {
                     <Style.Count>{data.scraps}</Style.Count>
                   </Style.Scrap>
                 </Style.FunWrap>
+                <Style.Link to={"../pages/CommunityWritingPage"} state={{feedId: data.feedId}}><Style.DeleteBtn onClick={deleteData}>글 삭제</Style.DeleteBtn></Style.Link>
               </Style.SubWrap>
             </Style.HeaderWrap>
 
@@ -370,6 +516,35 @@ function CommunityWriting() {
                 </Style.ScrapBtn>
               </Style.BtnWrap>
             </Style.BodyWrap>
+
+            <Style.CommentInputWrap>
+              <Style.CommentInput
+                type="text"
+                placeholder="댓글을 입력하세요."
+                onChange={(e) => {setInputComment(e.target.value)}}
+              ></Style.CommentInput>
+              <Style.SendBtn onClick={addComment}>
+                <FontAwesomeIcon className="logo" icon={faPaperPlane} size="2x" color="#94E0AC" />
+              </Style.SendBtn>
+            </Style.CommentInputWrap>
+            <Style.CommentWrap>
+              <Style.Comment>
+                {comments && comments.map(comment => {
+                return (
+                <Style.Wrap key={comment.commentId}>
+                  <Style.CommentProfileImg src={comment.memberImageUrl}></Style.CommentProfileImg>
+                  <Style.ContentWrap>
+                    <Style.CommentMember>
+                      <Style.CommentLevel>Lv {comment.memberLevel}</Style.CommentLevel>
+                      <Style.CommentNickName>{comment.memberNickName}</Style.CommentNickName>
+                    </Style.CommentMember>
+                    <Style.CommentContent>{comment.content}</Style.CommentContent>
+                  </Style.ContentWrap>
+                  <Style.DeleteCommentBtn onClick={() => {deleteComment(comment.commentId)}}>댓글 삭제</Style.DeleteCommentBtn>
+                </Style.Wrap>
+                )})}
+              </Style.Comment>
+            </Style.CommentWrap>
           </Style.Article>  
         }
       </Style.Wrapper>
