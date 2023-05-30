@@ -301,6 +301,7 @@ function Writing() {
     setTagBlocks(oldValues => {
       return oldValues.filter(tagBlock => tagBlock.id != id)
     })
+    setInput({...input, ["feedTags"]:feedTags.filter(tag => tag != id)});
   }
 
   const postImage = async () => {

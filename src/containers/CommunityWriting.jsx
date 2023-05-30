@@ -103,6 +103,7 @@ const Style = {
     display: flex;
     justify-content: start;
     align-items: center;
+    padding-top: 5vh;
   `,
   Img: styled.img`
     width: 15vw;
@@ -115,7 +116,7 @@ const Style = {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10vh 0;
+    padding: 10vh 0 0 0;
   `,
   LikeBtn: styled.button`
     padding: 0.5vh 0.7vw;
@@ -131,8 +132,8 @@ const Style = {
       background-color: #94E0AC;
       color: #FFFFFF;
     }
-    ${({isActive}) => 
-      isActive ?`
+    ${({isactive}) => 
+      isactive ?`
         background-color: #94E0AC;
         color: #FFFFFF;
       `:`
@@ -155,6 +156,15 @@ const Style = {
       background-color: #94E0AC;
       color: #FFFFFF;
     }
+    ${({isactive}) => 
+      isactive ?`
+        background-color: #94E0AC;
+        color: #FFFFFF;
+      `:`
+        background-color: #FFFFFF;
+        color: #94E0AC;
+      `
+    }
   `,
 };  
 
@@ -164,23 +174,18 @@ function CommunityWriting() {
   const [data, setData] = useState(null);
   const [likeState, setLikeState] = useState(false);
   const [scrapState, setScrapState] = useState(false);
+  const [likeId, setLikeId] = useState(-1);
+  const [scrapId, setScrapId] = useState(-1);
   const defaultImg = "https://tavelfeeldog.s3.ap-northeast-2.amazonaws.com/feed/%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0%20%EA%B8%B0%EB%B3%B8.png";
 
-  const getData = () => {
+
+  const getData = async () => {
     axios.get(`/api/feed/detail/static?feedId=${location.state.feedId}`, {
-    headers: {
-      Authorization: sessionStorage.getItem('token')
-    }})
-    .then((res) => {
-      if(res.status == 200) {
-        setData(res.data.body);
-        console.log(data);
-        console.log("데이터 불러오기 성공");
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    })
+      headers: {
+        Authorization: sessionStorage.getItem('token')
+      }}
+    ).then((res) => {setData(res.data.body);})
+    .catch((err) => console.log(err));
   };
 
   const deleteData = () => {
@@ -200,9 +205,40 @@ function CommunityWriting() {
       })
   };
 
-  const setLikes = () => {
+  const checkLikeState = async () => {
+    const response = await axios.get(`/api/feedLike/all`, {
+      headers: {
+        Authorization: sessionStorage.getItem('token')
+      }
+    });
+    let id = response.data.body.filter(lst => lst.feedId == location.state.feedId);
+    if (id.length == 0) {
+      setLikeState(false);
+    } else {
+      setLikeId(id[0]);
+      setLikeState(true);
+    }
+  }
+
+  const checkScrapState = async () => {
+    const response = await axios.get(`/api/scrap/all`, {
+      headers: {
+        Authorization: sessionStorage.getItem('token')
+      }
+    });
+    let id = response.data.body.filter(lst => lst.feedId == location.state.feedId);
+    if (id.length == 0) {
+      setScrapState(false);
+    } else {
+      setScrapId(id[0]);
+      setScrapState(true);
+    }
+  }
+
+  const setLikes = async () => {
+    await checkLikeState();
     if (likeState) {
-      axios.delete(`/api/feedLike?scrapId=${data.feedLikeId}`,{
+      await axios.delete(`/api/feedLike?feedLikeId=${likeId.feedLikeId}`,{
         headers: {
           Authorization: sessionStorage.getItem('token')
         }})
@@ -210,6 +246,7 @@ function CommunityWriting() {
         if(res.data.body)
           alert("좋아요가 취소되었습니다.");
           setLikeState(false);
+          setLikeId(-1);
       })
       .catch((err) => {
         console.log(err);
@@ -224,11 +261,10 @@ function CommunityWriting() {
       .then((res) => {
         if(res.data.body) {
           console.log("좋아요 성공");
-          setLikeState(res.data.body);
         } else {
-          console.log("좋아요 취소");
-          setLikeState(res.data.body);
+          console.log("이미 좋아요 하고 있음");
         }
+        setLikeState(true);
       })
       .catch((err) => {
         console.log(err);
@@ -236,16 +272,18 @@ function CommunityWriting() {
     }
   };
 
-  const setScrap = () => {
+  const setScrap = async () => {
+    await checkScrapState();
     if (scrapState) {
-      axios.delete(`/api/scrap?scrapId=${data.feedScrapId}`,{
+      await axios.delete(`/api/scrap?scrapId=${scrapId.scrapId}`,{
         headers: {
           Authorization: sessionStorage.getItem('token')
         }})
       .then((res) => {
         if(res.data.body)
           alert("스크랩이 취소되었습니다.");
-          setLikeState(false);
+          setScrapState(false);
+          setScrapId(-1);
       })
       .catch((err) => {
         console.log(err);
@@ -260,11 +298,10 @@ function CommunityWriting() {
       .then((res) => {
         if(res.data.body) {
           console.log("스크랩 성공");
-          setScrapState(res.data.body);
         } else {
-          console.log("스크랩 취소");
-          setScrapState(res.data.body);
+          console.log("이미 스크랩 하고 있음");
         }
+        setScrapState(true);
       })
       .catch((err) => {
         console.log(err);
@@ -274,6 +311,8 @@ function CommunityWriting() {
 
   useEffect(() => {
     getData();
+    checkLikeState();
+    checkScrapState();
   }, []);
 
 
@@ -315,16 +354,17 @@ function CommunityWriting() {
                   )})}
               </Style.TagList>
               <Style.ImgWrap>
-                {data.feedImageUrls.map(img => {img != defaultImg? 
-                  <Style.Img src={img}></Style.Img>: <Style.ImgWrap></Style.ImgWrap>
-                })}
+                {data.feedImageUrls[0] != defaultImg && data.feedImageUrls.map(img => {
+                  return (
+                  <Style.Img key={img} src={img}></Style.Img>
+                  )})}
               </Style.ImgWrap>
               <Style.BtnWrap>
-                <Style.LikeBtn isActive = {likeState} onClick={setLikes}>
+                <Style.LikeBtn isactive = {likeState? 1:0} onClick={setLikes}>
                   <FontAwesomeIcon icon={faHeart} color="#FF0000" />
                   &nbsp;&nbsp;좋아요
                 </Style.LikeBtn>
-                <Style.ScrapBtn isActive = {scrapState} onClick={setScrap}>
+                <Style.ScrapBtn isactive = {scrapState? 1:0} onClick={setScrap}>
                   <FontAwesomeIcon icon={faStar} color="#FFE600" />
                   &nbsp;&nbsp;스크랩
                 </Style.ScrapBtn>
