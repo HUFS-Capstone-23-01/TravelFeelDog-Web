@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useRef, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeadSideMask, faPencil } from "@fortawesome/free-solid-svg-icons";
+import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
@@ -233,13 +233,13 @@ function Writing() {
     "memberToken" : "",
     "title" : "",
     "body" : "",
-    "feedImageUrls" : ["","",""],
+    "feedImageUrls" : [],
     "feedTags" : []
   });
   const [tagTxt, setTagTxt] = useState("");
   const [tagBlocks, setTagBlocks] = useState([]);
   const [previewImage, setPreviewImage] = useState(["","",""]);
-  const [reqImage, setReqImage] = useState(["","",""]);
+  const [reqImage, setReqImage] = useState([]);
   const [imgUrl, setImgUrl] = useState([]);
   const img1Input = useRef();
   const img2Input = useRef();
@@ -309,6 +309,9 @@ function Writing() {
     for (let i=0; i<reqImage.length; i++) {
       formData.append('file', reqImage[i]);
     }
+    for (let values of formData.values()) {
+      console.log(values); // 이미지 객체의 정보
+    }
     await axios.post(`/api/feed/post/uploadImage`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -316,21 +319,25 @@ function Writing() {
     })
     .then((res) => {
       if (res.status == 200) {
-        feedImageUrls[0] = res.data.body[0];
-        feedImageUrls[1] = res.data.body[1];
-        feedImageUrls[2] = res.data.body[2];
+        for (let i=0; i<res.data.body.length; i++) {
+          feedImageUrls.push(res.data.body[i]);
+        }
+        //feedImageUrls[0] = res.data.body[0];
+        //feedImageUrls[1] = res.data.body[1];
+        //feedImageUrls[2] = res.data.body[2];
         setInput({
           ...input,
           ["feedImageUrls"]: feedImageUrls
         });
         console.log("이미지 업로드 성공");
-        console.log(input["feedImageUrls"]);
-        console.log("이미지 변환 = ", res);
+      } else {
+        console.log("이미지 없는 글");
       }
     })
     .catch((err) => {
       console.log(err);
     });
+    console.log(formData);
   };
 
   const LoginCheck = () => {

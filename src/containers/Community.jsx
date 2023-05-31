@@ -215,7 +215,7 @@ function Community() {
 
   const searchTag = () => {
     if (tag == "") {
-      window.location.reload();
+      getData();
     } else {
       axios.get(`/api/feed/list/searchTag?page=${page}&tagContents=${[tag]}`)
       .then((res) => {
@@ -243,7 +243,7 @@ function Community() {
     }
     setPageClick(pageClick);
     setPage(count);
-    getData();
+    searchTag();
   };
 
   const nextPage = (direction) => {
@@ -259,11 +259,11 @@ function Community() {
       }
     }
     setPage(pageNumbers[0]);
-    getData();
+    searchTag();
   };
 
   useEffect(() => {
-    getData();
+    searchTag();
   }, []);
 
   return (
