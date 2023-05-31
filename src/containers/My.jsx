@@ -97,6 +97,7 @@ const Style = {
     flex-direction: column;
     align-items: center;
     justify-align: center;
+    padding-bottom: 10vh;
   `,
   ListElement: styled.div`
     display: flex;
