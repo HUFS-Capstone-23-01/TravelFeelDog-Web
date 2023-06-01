@@ -9,7 +9,6 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
-import { SyncProblem } from "@mui/icons-material";
 
 const Style = {
   Wrapper: styled.div`
@@ -215,16 +214,20 @@ function Community() {
   };
 
   const searchTag = () => {
-    console.log([tag]);
-    /*axios.get(`/api/feed/list/searchTag?page=${page}`, {"tagContents": [tag]})
-    .then((res) => {
-      if(res.status == 200) {
-        console.log(res);
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });*/
+    if (tag == "") {
+      getData();
+    } else {
+      axios.get(`/api/feed/list/searchTag?page=${page}&tagContents=${[tag]}`)
+      .then((res) => {
+        if(res.status == 200) {
+          setDataList(res.data.body);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+    
   };
 
   const changePage = (count) => {
@@ -240,7 +243,7 @@ function Community() {
     }
     setPageClick(pageClick);
     setPage(count);
-    getData();
+    searchTag();
   };
 
   const nextPage = (direction) => {
@@ -256,11 +259,11 @@ function Community() {
       }
     }
     setPage(pageNumbers[0]);
-    getData();
+    searchTag();
   };
 
   useEffect(() => {
-    getData();
+    searchTag();
   }, []);
 
   return (

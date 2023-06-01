@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 const Style = {
   Wrapper: styled.div`
@@ -80,6 +82,15 @@ const Style = {
     font-weight: bold;
     padding-left: 10px;
   `,
+  DeleteBtn: styled.button`
+    border: 2px solid #94E0AC;
+    border-radius: 10px;
+    background-color: #94E0AC;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 10px;
+  `,
   BodyWrap: styled.div`
     display: flex;
     flex-direction: column;
@@ -103,6 +114,7 @@ const Style = {
     display: flex;
     justify-content: start;
     align-items: center;
+    padding-top: 5vh;
   `,
   Img: styled.img`
     width: 15vw;
@@ -115,7 +127,7 @@ const Style = {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10vh 0;
+    padding: 10vh 0 0 0;
   `,
   LikeBtn: styled.button`
     padding: 0.5vh 0.7vw;
@@ -131,8 +143,8 @@ const Style = {
       background-color: #94E0AC;
       color: #FFFFFF;
     }
-    ${({isActive}) => 
-      isActive ?`
+    ${({isactive}) => 
+      isactive ?`
         background-color: #94E0AC;
         color: #FFFFFF;
       `:`
@@ -155,6 +167,97 @@ const Style = {
       background-color: #94E0AC;
       color: #FFFFFF;
     }
+    ${({isactive}) => 
+      isactive ?`
+        background-color: #94E0AC;
+        color: #FFFFFF;
+      `:`
+        background-color: #FFFFFF;
+        color: #94E0AC;
+      `
+    }
+  `,
+  CommentInputWrap: styled.div`
+    width: 100%;
+    height: 7vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #94E0AC;
+    border-radius: 20px;
+    margin: 10vh 0 5vh 0;
+  `,
+  CommentInput: styled.input`
+    width: 90%;
+    height: 6vh;
+    border: none;
+    font-size: 18px;
+    text-align: left;
+    color: #000000;
+    outline: none;
+    &:placeholder {
+      color: #A5A5A5;
+    }
+  `,
+  SendBtn: styled.button`
+    width: 6%;
+    height: 6vh;
+    border: none;
+    background-color: transparent;
+    &:hover, &:active {
+      .logo {
+        color: #FFDD65;
+      }
+    }
+  `,
+  CommentWrap: styled.div`
+    display: flex;
+    flex-direction: column;
+  `,    
+  Comment: styled.div`
+    display: flex;
+    flex-direction: column;
+  `,
+  Wrap: styled.div`
+    display: flex;
+    padding: 1vh 0;
+  `,
+  ContentWrap: styled.div`
+    display: flex;
+    flex-direction: column;
+    flex: 5;
+  `,
+  CommentProfileImg: styled.img`
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 0 2vw;
+  `,
+  CommentMember: styled.div`
+    display: flex;
+    padding-bottom: 0.5vh;
+    font-weight: bold;
+  `,
+  CommentLevel: styled.div`
+    padding: 0 1vw;
+  `,
+  CommentNickName: styled.div`
+  `,
+  CommentContent: styled.div`
+    padding: 0 1vw;
+  `,
+  DeleteCommentBtn: styled.button`
+    height: 25px;
+    font-size: 12px;
+    border: 2px solid #94E0AC;
+    background-color: #94E0AC;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-weight: bold;
+  `,
+  Link: styled(Link)`
+    text-decoration: none;
+    color: #FFFFFF;
   `,
 };  
 
@@ -162,29 +265,27 @@ function CommunityWriting() {
   const location = useLocation();
   const navigate = useNavigate();
   const [data, setData] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [inputComment, setInputComment] = useState("");
   const [likeState, setLikeState] = useState(false);
   const [scrapState, setScrapState] = useState(false);
+  const [likeId, setLikeId] = useState(-1);
+  const [scrapId, setScrapId] = useState(-1);
   const defaultImg = "https://tavelfeeldog.s3.ap-northeast-2.amazonaws.com/feed/%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0%20%EA%B8%B0%EB%B3%B8.png";
 
-  const getData = () => {
+
+  const getData = async () => {
     axios.get(`/api/feed/detail/static?feedId=${location.state.feedId}`, {
-    headers: {
-      Authorization: sessionStorage.getItem('token')
-    }})
-    .then((res) => {
-      if(res.status == 200) {
-        setData(res.data.body);
-        console.log(data);
-        console.log("데이터 불러오기 성공");
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    })
+      headers: {
+        Authorization: sessionStorage.getItem('token')
+      }}
+    ).then((res) => {setData(res.data.body);})
+    .catch((err) => console.log(err));
   };
 
   const deleteData = () => {
-    axios.delete(`/api/feed/detail?feedId=${location.state.feedId}`, {
+    if (sessionStorage.getItem('token') == data.member.token) {
+      axios.delete(`/api/feed/detail?feedId=${location.state.feedId}`, {
       headers: {
         Authorization: sessionStorage.getItem('token')
       }})
@@ -198,11 +299,46 @@ function CommunityWriting() {
       .catch((err) => {
         console.log(err);
       })
+    } else {
+      alert("글 삭제 권한이 없습니다.");
+    }
+    
   };
 
-  const setLikes = () => {
+  const checkLikeState = async () => {
+    const response = await axios.get(`/api/feedLike/all`, {
+      headers: {
+        Authorization: sessionStorage.getItem('token')
+      }
+    });
+    let id = response.data.body.filter(lst => lst.feedId == location.state.feedId);
+    if (id.length == 0) {
+      setLikeState(false);
+    } else {
+      setLikeId(id[0]);
+      setLikeState(true);
+    }
+  }
+
+  const checkScrapState = async () => {
+    const response = await axios.get(`/api/scrap/all`, {
+      headers: {
+        Authorization: sessionStorage.getItem('token')
+      }
+    });
+    let id = response.data.body.filter(lst => lst.feedId == location.state.feedId);
+    if (id.length == 0) {
+      setScrapState(false);
+    } else {
+      setScrapId(id[0]);
+      setScrapState(true);
+    }
+  }
+
+  const setLikes = async () => {
+    await checkLikeState();
     if (likeState) {
-      axios.delete(`/api/feedLike?scrapId=${data.feedLikeId}`,{
+      await axios.delete(`/api/feedLike?feedLikeId=${likeId.feedLikeId}`,{
         headers: {
           Authorization: sessionStorage.getItem('token')
         }})
@@ -210,6 +346,7 @@ function CommunityWriting() {
         if(res.data.body)
           alert("좋아요가 취소되었습니다.");
           setLikeState(false);
+          setLikeId(-1);
       })
       .catch((err) => {
         console.log(err);
@@ -224,11 +361,10 @@ function CommunityWriting() {
       .then((res) => {
         if(res.data.body) {
           console.log("좋아요 성공");
-          setLikeState(res.data.body);
         } else {
-          console.log("좋아요 취소");
-          setLikeState(res.data.body);
+          console.log("이미 좋아요 하고 있음");
         }
+        setLikeState(true);
       })
       .catch((err) => {
         console.log(err);
@@ -236,16 +372,18 @@ function CommunityWriting() {
     }
   };
 
-  const setScrap = () => {
+  const setScrap = async () => {
+    await checkScrapState();
     if (scrapState) {
-      axios.delete(`/api/scrap?scrapId=${data.feedScrapId}`,{
+      await axios.delete(`/api/scrap?scrapId=${scrapId.scrapId}`,{
         headers: {
           Authorization: sessionStorage.getItem('token')
         }})
       .then((res) => {
         if(res.data.body)
           alert("스크랩이 취소되었습니다.");
-          setLikeState(false);
+          setScrapState(false);
+          setScrapId(-1);
       })
       .catch((err) => {
         console.log(err);
@@ -260,11 +398,10 @@ function CommunityWriting() {
       .then((res) => {
         if(res.data.body) {
           console.log("스크랩 성공");
-          setScrapState(res.data.body);
         } else {
-          console.log("스크랩 취소");
-          setScrapState(res.data.body);
+          console.log("이미 스크랩 하고 있음");
         }
+        setScrapState(true);
       })
       .catch((err) => {
         console.log(err);
@@ -272,8 +409,55 @@ function CommunityWriting() {
     }
   };
 
+  const getComment = async () => {
+    axios.get(`/api/comment/all?feedId=${location.state.feedId}`, {
+      headers: {
+        Authorization: sessionStorage.getItem('token')
+      }})
+    .then((res) => {setComments(res.data.body); console.log(res);})
+    .catch((err) => console.log(err));
+  };
+
+  const addComment = () => {
+    axios.post(`/api/comment`, {
+        "feedId": location.state.feedId,
+        "content": inputComment
+      }, {
+      headers: {
+        Authorization: sessionStorage.getItem('token')
+      }})
+    .then((res) => { window.location.reload(); })
+    .catch((err) => console.log(err));
+  };
+
+  const deleteComment = (id) => {
+    console.log(id);
+    console.log(comments);
+    axios.delete(`/api/comment/?commentId=${id}`, {
+      headers: {
+        Authorization: sessionStorage.getItem('token')
+      }})
+    .then((res) => {
+      if(res.status == 200) {
+        if (res.data.body) {
+          alert("정상적으로 댓글이 삭제되었습니다");
+          console.log("데이터 삭제 성공");
+          window.location.reload();
+        } else {
+          alert("삭제 권한이 없습니다.");
+        } 
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  };
+
   useEffect(() => {
     getData();
+    checkLikeState();
+    checkScrapState();
+    getComment();
   }, []);
 
 
@@ -303,6 +487,7 @@ function CommunityWriting() {
                     <Style.Count>{data.scraps}</Style.Count>
                   </Style.Scrap>
                 </Style.FunWrap>
+                <Style.Link to={"../pages/CommunityWritingPage"} state={{feedId: data.feedId}}><Style.DeleteBtn onClick={deleteData}>글 삭제</Style.DeleteBtn></Style.Link>
               </Style.SubWrap>
             </Style.HeaderWrap>
 
@@ -315,21 +500,51 @@ function CommunityWriting() {
                   )})}
               </Style.TagList>
               <Style.ImgWrap>
-                {data.feedImageUrls.map(img => {img != defaultImg? 
-                  <Style.Img src={img}></Style.Img>: <Style.ImgWrap></Style.ImgWrap>
-                })}
+                {data.feedImageUrls[0] != defaultImg && data.feedImageUrls.map(img => {
+                  return (
+                  <Style.Img key={img} src={img}></Style.Img>
+                  )})}
               </Style.ImgWrap>
               <Style.BtnWrap>
-                <Style.LikeBtn isActive = {likeState} onClick={setLikes}>
+                <Style.LikeBtn isactive = {likeState? 1:0} onClick={setLikes}>
                   <FontAwesomeIcon icon={faHeart} color="#FF0000" />
                   &nbsp;&nbsp;좋아요
                 </Style.LikeBtn>
-                <Style.ScrapBtn isActive = {scrapState} onClick={setScrap}>
+                <Style.ScrapBtn isactive = {scrapState? 1:0} onClick={setScrap}>
                   <FontAwesomeIcon icon={faStar} color="#FFE600" />
                   &nbsp;&nbsp;스크랩
                 </Style.ScrapBtn>
               </Style.BtnWrap>
             </Style.BodyWrap>
+
+            <Style.CommentInputWrap>
+              <Style.CommentInput
+                type="text"
+                placeholder="댓글을 입력하세요."
+                onChange={(e) => {setInputComment(e.target.value)}}
+              ></Style.CommentInput>
+              <Style.SendBtn onClick={addComment}>
+                <FontAwesomeIcon className="logo" icon={faPaperPlane} size="2x" color="#94E0AC" />
+              </Style.SendBtn>
+            </Style.CommentInputWrap>
+            <Style.CommentWrap>
+              <Style.Comment>
+                {comments && comments.map(comment => {
+                return (
+                <Style.Wrap key={comment.commentId}>
+                  <Style.CommentProfileImg src={comment.memberImageUrl}></Style.CommentProfileImg>
+                  <Style.ContentWrap>
+                    <Style.CommentMember>
+                      <Style.CommentLevel>Lv {comment.memberLevel}</Style.CommentLevel>
+                      <Style.CommentNickName>{comment.memberNickName}</Style.CommentNickName>
+                    </Style.CommentMember>
+                    <Style.CommentContent>{comment.content}</Style.CommentContent>
+                  </Style.ContentWrap>
+                  <Style.DeleteCommentBtn onClick={() => {deleteComment(comment.commentId)}}>댓글 삭제</Style.DeleteCommentBtn>
+                </Style.Wrap>
+                )})}
+              </Style.Comment>
+            </Style.CommentWrap>
           </Style.Article>  
         }
       </Style.Wrapper>

@@ -239,7 +239,7 @@ function Writing() {
   const [tagTxt, setTagTxt] = useState("");
   const [tagBlocks, setTagBlocks] = useState([]);
   const [previewImage, setPreviewImage] = useState(["","",""]);
-  const [reqImage, setReqImage] = useState(["","",""]);
+  const [reqImage, setReqImage] = useState([]);
   const [imgUrl, setImgUrl] = useState([]);
   const img1Input = useRef();
   const img2Input = useRef();
@@ -301,43 +301,43 @@ function Writing() {
     setTagBlocks(oldValues => {
       return oldValues.filter(tagBlock => tagBlock.id != id)
     })
+    setInput({...input, ["feedTags"]:feedTags.filter(tag => tag != id)});
   }
 
-  const postImage = () => {
+  const postImage = async () => {
     const formData = new FormData();
     for (let i=0; i<reqImage.length; i++) {
       formData.append('file', reqImage[i]);
     }
-    
-    for (const key of formData.keys()) {
-      console.log(key);
+    for (let values of formData.values()) {
+      console.log(values); // 이미지 객체의 정보
     }
-    for (const value of formData.values()) {
-      console.log(value);
-    }
-    console.log(formData);
-    axios.post(`/api/feed/post/uploadImage`, formData, {
+    await axios.post(`/api/feed/post/uploadImage`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     })
     .then((res) => {
       if (res.status == 200) {
-        setImgUrl(imgUrl.push(res.data.body));
-        feedImageUrls.push(imgUrl[0][0])
-        feedImageUrls.push(imgUrl[0][1])
-        feedImageUrls.push(imgUrl[0][2])
+        for (let i=0; i<res.data.body.length; i++) {
+          feedImageUrls.push(res.data.body[i]);
+        }
+        //feedImageUrls[0] = res.data.body[0];
+        //feedImageUrls[1] = res.data.body[1];
+        //feedImageUrls[2] = res.data.body[2];
         setInput({
           ...input,
           ["feedImageUrls"]: feedImageUrls
         });
         console.log("이미지 업로드 성공");
-        console.log(input["feedImageUrls"]);
+      } else {
+        console.log("이미지 없는 글");
       }
     })
     .catch((err) => {
       console.log(err);
     });
+    console.log(formData);
   };
 
   const LoginCheck = () => {
@@ -354,23 +354,20 @@ function Writing() {
     }
   }
 
-  const postWriting = () => {
+  const postWriting = async () => {
     if(input["title"]){
-      postImage();
-      axios.post(`/api/feed/post`, input)
-      .then((res) => {
-        console.log("res = ", res);
+      try {
+        await postImage();
+        const res = await axios.post(`/api/feed/post`, input);
+        console.log("글 등록 res = ", res);
         alert("글이 정상적으로 등록되었습니다");
-        console.log("input = ", input);
         navigate("../pages/CommunityPage");
-      })
-      .catch((err) => {
+      } catch (err) {
         console.log(err);
-      });
+      }
     } else {
       alert("글 제목은 필수입력입니다");
     }
-    
   };
 
   useEffect(() => {
