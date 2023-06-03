@@ -274,8 +274,18 @@ function CommunityWriting() {
   const defaultImg = "https://tavelfeeldog.s3.ap-northeast-2.amazonaws.com/feed/%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0%20%EA%B8%B0%EB%B3%B8.png";
 
 
+  const LoginCheck = () => {
+    let token = sessionStorage.getItem('token');
+    if (token){
+      console.log("로그인 확인")
+    } else {
+      alert("로그인을 해주세요")
+      navigate("/");
+    }
+  };
+
   const getData = async () => {
-    axios.get(`/api/feed/detail/static?feedId=${location.state.feedId}`, {
+    axios.get(process.env.REACT_APP_DB_HOST + `/feed/detail/static?feedId=${location.state.feedId}`, {
       headers: {
         Authorization: sessionStorage.getItem('token')
       }}
@@ -285,7 +295,7 @@ function CommunityWriting() {
 
   const deleteData = () => {
     if (sessionStorage.getItem('token') == data.member.token) {
-      axios.delete(`/api/feed/detail?feedId=${location.state.feedId}`, {
+      axios.delete(process.env.REACT_APP_DB_HOST + `/feed/detail?feedId=${location.state.feedId}`, {
       headers: {
         Authorization: sessionStorage.getItem('token')
       }})
@@ -306,7 +316,7 @@ function CommunityWriting() {
   };
 
   const checkLikeState = async () => {
-    const response = await axios.get(`/api/feedLike/all`, {
+    const response = await axios.get(process.env.REACT_APP_DB_HOST + `/feedLike/all`, {
       headers: {
         Authorization: sessionStorage.getItem('token')
       }
@@ -318,10 +328,10 @@ function CommunityWriting() {
       setLikeId(id[0]);
       setLikeState(true);
     }
-  }
+  };
 
   const checkScrapState = async () => {
-    const response = await axios.get(`/api/scrap/all`, {
+    const response = await axios.get(process.env.REACT_APP_DB_HOST + `/scrap/all`, {
       headers: {
         Authorization: sessionStorage.getItem('token')
       }
@@ -333,12 +343,12 @@ function CommunityWriting() {
       setScrapId(id[0]);
       setScrapState(true);
     }
-  }
+  };
 
   const setLikes = async () => {
     await checkLikeState();
     if (likeState) {
-      await axios.delete(`/api/feedLike?feedLikeId=${likeId.feedLikeId}`,{
+      await axios.delete(process.env.REACT_APP_DB_HOST + `/feedLike?feedLikeId=${likeId.feedLikeId}`,{
         headers: {
           Authorization: sessionStorage.getItem('token')
         }})
@@ -352,7 +362,7 @@ function CommunityWriting() {
         console.log(err);
       })
     } else {
-      axios.post(`/api/feedLike`, {
+      axios.post(process.env.REACT_APP_DB_HOST + `/feedLike`, {
         "feedId": location.state.feedId
       }, {
         headers: {
@@ -375,7 +385,7 @@ function CommunityWriting() {
   const setScrap = async () => {
     await checkScrapState();
     if (scrapState) {
-      await axios.delete(`/api/scrap?scrapId=${scrapId.scrapId}`,{
+      await axios.delete(process.env.REACT_APP_DB_HOST + `/scrap?scrapId=${scrapId.scrapId}`,{
         headers: {
           Authorization: sessionStorage.getItem('token')
         }})
@@ -389,7 +399,7 @@ function CommunityWriting() {
         console.log(err);
       })
     } else {
-      axios.post(`/api/scrap`, {
+      axios.post(process.env.REACT_APP_DB_HOST + `/scrap`, {
         "feedId": location.state.feedId
       }, {
         headers: {
@@ -410,7 +420,7 @@ function CommunityWriting() {
   };
 
   const getComment = async () => {
-    axios.get(`/api/comment/all?feedId=${location.state.feedId}`, {
+    axios.get(process.env.REACT_APP_DB_HOST + `/comment/all?feedId=${location.state.feedId}`, {
       headers: {
         Authorization: sessionStorage.getItem('token')
       }})
@@ -419,21 +429,21 @@ function CommunityWriting() {
   };
 
   const addComment = () => {
-    axios.post(`/api/comment`, {
+    axios.post(process.env.REACT_APP_DB_HOST + `/comment`, {
         "feedId": location.state.feedId,
         "content": inputComment
       }, {
       headers: {
         Authorization: sessionStorage.getItem('token')
       }})
-    .then((res) => { window.location.reload(); })
+    .then((res) => { navigate("../pages/CommunityWritingPage"); })
     .catch((err) => console.log(err));
   };
 
   const deleteComment = (id) => {
     console.log(id);
     console.log(comments);
-    axios.delete(`/api/comment/?commentId=${id}`, {
+    axios.delete(process.env.REACT_APP_DB_HOST + `/comment/?commentId=${id}`, {
       headers: {
         Authorization: sessionStorage.getItem('token')
       }})
@@ -442,7 +452,7 @@ function CommunityWriting() {
         if (res.data.body) {
           alert("정상적으로 댓글이 삭제되었습니다");
           console.log("데이터 삭제 성공");
-          window.location.reload();
+          navigate("../pages/CommunityWritingPage");
         } else {
           alert("삭제 권한이 없습니다.");
         } 
@@ -454,6 +464,7 @@ function CommunityWriting() {
   };
 
   useEffect(() => {
+    LoginCheck();
     getData();
     checkLikeState();
     checkScrapState();

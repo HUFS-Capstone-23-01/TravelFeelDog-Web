@@ -190,22 +190,32 @@ function My() {
   };
 
   const changeNickName = () => {
-    axios.put(`/api/member/profile/nick`, {
-      "nickName" : nickName,
-      "firebaseToken" : sessionStorage.getItem('token')
-    })
-    .then((res) => {
-      if (res.status == 200) {
-        alert("정상적으로 닉네임을 변경했습니다.");
-        window.location.reload();
-      } else {
-        alert("중복 닉네임 : 사용 불가능한 닉네임입니다.")
-      }
-    })
+    if (nickName == sessionStorage.getItem('nickname')) {
+      alert("중복된 닉네임입니다.");
+      navigate("../pages/MyPage");
+    } 
+    else {
+      axios.put(process.env.REACT_APP_DB_HOST + `/member/profile/nick`, {
+        "nickName" : nickName,
+        "firebaseToken" : sessionStorage.getItem('token')
+      })
+      .then((res) => {
+        if (res.status == 200) {
+          alert("정상적으로 닉네임을 변경했습니다.");
+          navigate("../pages/MyPage");
+          console.log("페이지 이동 성공");
+        } else {
+          alert("중복 닉네임 : 사용 불가능한 닉네임입니다.")
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    } 
   };
 
   const getUser = () => {
-    axios.get(`/api/member`, {
+    axios.get(process.env.REACT_APP_DB_HOST + `/member`, {
       headers: {
         Authorization: sessionStorage.getItem('token')
       }
@@ -219,7 +229,7 @@ function My() {
   };
 
   const getScrap = () => {
-    axios.get(`/api/scrap/all`, {
+    axios.get(process.env.REACT_APP_DB_HOST + `/scrap/all`, {
       headers: {
         Authorization: sessionStorage.getItem('token')
       }
@@ -246,7 +256,7 @@ function My() {
   };
 
   const getLike = () => {
-    axios.get(`/api/feedLike/all`, {
+    axios.get(process.env.REACT_APP_DB_HOST + `/feedLike/all`, {
       headers: {
         Authorization: sessionStorage.getItem('token')
       }
@@ -273,7 +283,7 @@ function My() {
   };
 
   const deleteLike = (id) => {
-    axios.delete(`/api/feedLike?feedLikeId=${id}`, {
+    axios.delete(process.env.REACT_APP_DB_HOST + `/feedLike?feedLikeId=${id}`, {
       headers: {
         Authorization: sessionStorage.getItem('token')
       }
@@ -290,7 +300,7 @@ function My() {
   };
 
   const deleteScrap = (id) => {
-    axios.delete(`/api/scrap?scrapId=${id}`, {
+    axios.delete(process.env.REACT_APP_DB_HOST + `/scrap?scrapId=${id}`, {
       headers: {
         Authorization: sessionStorage.getItem('token')
       }

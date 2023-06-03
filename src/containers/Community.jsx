@@ -198,7 +198,7 @@ function Community() {
   const [pageClick, setPageClick] = useState([true, false, false, false, false, false, false, false, false, false]);
 
   const getData = () => {
-    axios.get(`/api/feed/list?page=${page}`)
+    axios.get(process.env.REACT_APP_DB_HOST + `/feed/list?page=${page}`)
     .then((res) => {
       if( res.status == 200) {
         setDataList(res.data.body);
@@ -217,7 +217,7 @@ function Community() {
     if (tag == "") {
       getData();
     } else {
-      axios.get(`/api/feed/list/searchTag?page=${page}&tagContents=${[tag]}`)
+      axios.get(process.env.REACT_APP_DB_HOST + `/feed/list/searchTag?page=${page}&tagContents=${[tag]}`)
       .then((res) => {
         if(res.status == 200) {
           setDataList(res.data.body);

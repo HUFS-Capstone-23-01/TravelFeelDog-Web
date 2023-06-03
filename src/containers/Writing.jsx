@@ -312,7 +312,7 @@ function Writing() {
     for (let values of formData.values()) {
       console.log(values); // 이미지 객체의 정보
     }
-    await axios.post(`/api/feed/post/uploadImage`, formData, {
+    await axios.post(process.env.REACT_APP_DB_HOST + `/feed/post/uploadImage`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -358,7 +358,7 @@ function Writing() {
     if(input["title"]){
       try {
         await postImage();
-        const res = await axios.post(`/api/feed/post`, input);
+        const res = await axios.post(process.env.REACT_APP_DB_HOST + `/feed/post`, input);
         console.log("글 등록 res = ", res);
         alert("글이 정상적으로 등록되었습니다");
         navigate("../pages/CommunityPage");

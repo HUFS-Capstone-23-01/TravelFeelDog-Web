@@ -74,7 +74,7 @@ const RegisterForm =  () => {
   const registerSubmit = () => {
     console.log(sessionStorage.getItem('token'))
     console.log(nickname);
-    axios.post(`/api/member`, {
+    axios.post(process.env.REACT_APP_DB_HOST + `/member`, {
         "nickName" : nickname,
         "firebaseToken" : sessionStorage.getItem('token')
     })
