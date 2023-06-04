@@ -3,7 +3,7 @@ import './index.css';
 import App from './App';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import InquiryModal from './pages/InquiryModal';
 import EmailModal from './pages/EmailModal';
@@ -21,7 +21,7 @@ import RegisterPage from './pages/RegisterPage';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path='/' element={ <MainPage />} />
         <Route path='/pages/MainPage' element={ <MainPage />} />
@@ -37,8 +37,9 @@ root.render(
         <Route path='/pages/CommunityWritingPage' element={ <CommunityWritingPage />} />
         <Route path='/pages/WritingPage' element={ <WritingPage />} />
         <Route path='/pages/MyPage' element={ <MyPage />} />
+        <Route path='*' element={ <MainPage />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
     <App />
   </React.StrictMode>
 );
