@@ -1,12 +1,25 @@
+import Footer from "../containers/Footer";
+import Header from "../containers/Header";
+import styled from "styled-components";
+import Info from "../modal/Info";
+
 const Style = {
-      
+  Wrapper: styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  `,
 };
 
 function InfoModal() {  
     
   return (
     <>
-      정보 모달창
+      <Style.Wrapper>
+        <Header></Header>
+        <Info></Info>
+        <Footer></Footer>
+      </Style.Wrapper>
     </>
   );
 }

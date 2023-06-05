@@ -43,13 +43,13 @@ const Style = {
       border-radius: 50%;
   `,
   FooterList: styled.div`
-      width: 10vw;
       display: flex;
-      justify-content: space-around;
+      align-items: center;
+      justify-content: center;
       color: #FFFFFF;
   `,
   List: styled.div`
-      padding: 0, 2vw, 0, 2vw;
+      padding: 0 1.7vw;
   `,
   Link: styled(Link)`
       text-decoration: none;
