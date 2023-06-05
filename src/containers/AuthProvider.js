@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }) => {
             const token = await firebaseUser.uid;
             sessionStorage.setItem('token',token);
             axios.get(process.env.REACT_APP_DB_HOST + '/member', {
+                //withCredentials: true,
                 headers: {
                     Authorization: `${token}`
                 }
