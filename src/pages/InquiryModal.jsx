@@ -20,7 +20,7 @@ function InquiryModal() {
         <Header></Header>
         <Inquiry></Inquiry>
         <Footer></Footer>
-    </Style.Wrapper>
+      </Style.Wrapper>
     </>
   );
 }
