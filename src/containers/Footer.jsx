@@ -68,7 +68,7 @@ function Footer() {
       <Style.Footer>
         <Style.IconList>
             <Style.Link to="../pages/InquiryModal"><Style.IconWrap><Style.FontAwesomeIcon icon={faComments} size="2x"/></Style.IconWrap></Style.Link>
-            <Style.Link to="https://www.naver.com/"><Style.IconWrap><Style.IconImg src={iconImg}/></Style.IconWrap></Style.Link>
+            <Style.Link to="https://play.google.com/store/games?device=windows&utm_source=apac_med&hl=ko&utm_medium=hasem&utm_content=Oct0121&utm_campaign=Evergreen&pcampaignid=MKT-EDR-apac-kr-1003227-med-hasem-py-Evergreen-Oct0121-Text_Search_BKWS-BKWS%7CONSEM_kwid_43700065216954478_creativeid_535244992764_device_c&gclid=CjwKCAjwm4ukBhAuEiwA0zQxk-UHG4Z6cz3z6wy0HYXhu5Pv6X9ENFg3pHGKKLfZgmmV7Z14Aysf2BoC2hEQAvD_BwE&gclsrc=aw.ds"><Style.IconWrap><Style.IconImg src={iconImg}/></Style.IconWrap></Style.Link>
             <Style.Link to="../pages/EmailModal"><Style.IconWrap><Style.FontAwesomeIcon icon={faEnvelope} size="2x"/></Style.IconWrap></Style.Link>
         </Style.IconList>
         
