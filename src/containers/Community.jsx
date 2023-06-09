@@ -241,21 +241,25 @@ function Community() {
     } else {
       pageClick[count%10-1] = true;
     }
-    setPageClick(pageClick);
+    setPageClick([...pageClick]);
     setPage(count);
     searchTag();
   };
 
   const nextPage = (direction) => {
     if (direction == "right") {
-      let newPage = pageNumbers.map( (item) => {return (item += 10);});
-      setPageNumbers(newPage);
+      for (let i=0; i<10; i++) {
+        pageNumbers[i] += 10;
+      }
+      setPageNumbers([...pageNumbers]);
     } else {
-      if (page-10 < 0) {
+      if (pageNumbers[0]-10 <= 0) {
         setPageNumbers([1,2,3,4,5,6,7,8,9,10]);
       } else {
-        let newPage = pageNumbers.map( (item) => {return (item -= 10);});
-        setPageNumbers(newPage);
+        for (let i=0; i<10; i++) {
+          pageNumbers[i] -= 10;
+        }
+        setPageNumbers([...pageNumbers]);
       }
     }
     setPage(pageNumbers[0]);
