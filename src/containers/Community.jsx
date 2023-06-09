@@ -193,7 +193,7 @@ const Style = {
 function Community() {
   const [tag, setTag] = useState("");
   const [dataList, setDataList] = useState([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState([1]);
   const [pageNumbers, setPageNumbers] = useState([1,2,3,4,5,6,7,8,9,10]);
   const [pageClick, setPageClick] = useState([true, false, false, false, false, false, false, false, false, false]);
 
@@ -241,24 +241,32 @@ function Community() {
     } else {
       pageClick[count%10-1] = true;
     }
-    setPageClick(pageClick);
-    setPage(count);
+    console.log("count = ", count);
+    page[0] = count;
+    setPage([...page])
+    setPageClick([...pageClick]);
+    console.log("page = ", page);
     searchTag();
   };
 
   const nextPage = (direction) => {
     if (direction == "right") {
-      let newPage = pageNumbers.map( (item) => {return (item += 10);});
-      setPageNumbers(newPage);
+      for (let i=0; i<10; i++) {
+        pageNumbers[i] += 10;
+      }
+      setPageNumbers([...pageNumbers]);
     } else {
-      if (page-10 < 0) {
+      if (pageNumbers[0]-10 <= 0) {
         setPageNumbers([1,2,3,4,5,6,7,8,9,10]);
       } else {
-        let newPage = pageNumbers.map( (item) => {return (item -= 10);});
-        setPageNumbers(newPage);
+        for (let i=0; i<10; i++) {
+          pageNumbers[i] -= 10;
+        }
+        setPageNumbers([...pageNumbers]);
       }
     }
-    setPage(pageNumbers[0]);
+    page[0] = pageNumbers[0]
+    setPage([...page]);
     searchTag();
   };
 

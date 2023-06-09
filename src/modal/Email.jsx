@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import iconImg1 from "../img/login_icon1.png";
+import email from "../img/email.png";
 
 const Style = {
     Wrapper: styled.div`
@@ -66,7 +67,7 @@ function Email() {
               woowagongdol@gmail.com
             </Style.Detail>
           </Style.Contents>
-          <Style.Img src="https://o.remove.bg/downloads/b9620abc-d4ef-4bbd-a7e6-bbe544617a04/mail-152814_1280-removebg-preview.png"></Style.Img>
+          <Style.Img src={email}></Style.Img>
         </Style.Article>
       </Style.Wrapper>
     </>
