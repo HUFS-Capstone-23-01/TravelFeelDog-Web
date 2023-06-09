@@ -193,7 +193,7 @@ const Style = {
 function Community() {
   const [tag, setTag] = useState("");
   const [dataList, setDataList] = useState([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState([1]);
   const [pageNumbers, setPageNumbers] = useState([1,2,3,4,5,6,7,8,9,10]);
   const [pageClick, setPageClick] = useState([true, false, false, false, false, false, false, false, false, false]);
 
@@ -241,8 +241,11 @@ function Community() {
     } else {
       pageClick[count%10-1] = true;
     }
+    console.log("count = ", count);
+    page[0] = count;
+    setPage([...page])
     setPageClick([...pageClick]);
-    setPage(count);
+    console.log("page = ", page);
     searchTag();
   };
 
@@ -262,7 +265,8 @@ function Community() {
         setPageNumbers([...pageNumbers]);
       }
     }
-    setPage(pageNumbers[0]);
+    page[0] = pageNumbers[0]
+    setPage([...page]);
     searchTag();
   };
 
